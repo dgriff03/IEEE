@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 APR 2015 14:07
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 APR 2015 14:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -447,7 +447,7 @@ Before submitting the final camera ready copy, remember to:
 Here is how much of TeX's memory you used:
  3783 strings out of 493315
  56988 string characters out of 6137904
- 130192 words of memory out of 5000000
+ 129192 words of memory out of 5000000
  7178 multiletter control sequences out of 15000+600000
  36949 words of font info for 72 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -467,7 +467,7 @@ exlive/2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/201
 3/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/
 type1/urw/times/utmri8a.pfb>
-Output written on IEEEPAPER.pdf (7 pages, 967385 bytes).
+Output written on IEEEPAPER.pdf (7 pages, 967569 bytes).
 PDF statistics:
  100 PDF objects out of 1000 (max. 8388607)
  62 compressed objects within 1 object stream
