@@ -38,21 +38,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin scelerisque non p
 
 \section{Introduction}
 As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device's position can be particularly valuable information for both the user and some external systems. A potential use case for a consumer is locating a friend within a building, whereas a company may take the opportunity to provide location-dependent advertisements.
-Global Navigation Satellite Systems (GNSS) such as GPS achieve acceptable accuracy outdoors, but these systems fail within the No-Line of Sight (NLoS) conditions experienced indoors [14]. GNSS use traditional methods of positioning such as Trilateration or Triangulation to determine the position of a wireless device. Although high-accuracy indoor positioning has been achieved using both of these methods, specialized hardware is required [10], and both methods yield high error when using WLAN data due to the complexity of indoor WLAN signal propagation.\\ 
+Global Navigation Satellite Systems (GNSS) such as GPS achieve acceptable accuracy outdoors, but these systems fail within the No-Line of Sight (NLoS) conditions experienced indoors [14]. GNSS use traditional methods of positioning such as Trilateration or Triangulation to determine the position of a wireless device. Although high-accuracy indoor positioning has been achieved using both of these methods, specialized hardware is required [10], and both methods yield high error when using Wi-Fi data due to the complexity of indoor Wi-Fi signal propagation.\\ 
 \indent Most indoor positioning systems make use of Wi-Fi networks, as they are widely available and natively supported by most hardware. This makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model [5], and manual site-survey. Site-simulation allows for rapid site integration but requires prior knowledge of the position of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site.\\ 
-\indent We propose an indoor positioning system with low site-survey time and high accuracy, optimised for implementation in commercial environments with rigid infrastructure.
-
+\indent We propose an indoor positioning system with low site-survey time and high accuracy, optimized for implementation in commercial environments with rigid infrastructure.
+\indent This work is organized as follows: we first discuss the aims of our research; followed by a discussion of how Fingerprints (FP) are recorded and how the FP database is created; we then discuss our positioning algorithm, describing our distance metrics and algorithm refinements; we then present the performance of our application and compare it with that of other systems; and finally, we discuss possible future research.
 
 \section{Indoor Positioning System}
-The basic requirement of an indoor positioning system is that it provides precision to the degree of a room, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale without extreme detriment to runtime. Further, the system must not require extensive knowledge of or modifications to the site, or be costly to implement.\\
+The basic requirement of an indoor positioning system is that it provides precision to the degree of a room, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
 \indent We implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. We also implement several methods to improve the performance of our positioning application, including map-aware algorithm modification and distance metric improvements. To address monetary costs and the anonymity of access point locations, our solution utilized a pre-existing Wi-Fi network and was recorded using a manual site-survey.\\
-\indent Our approach uses Received Signal Strength (RSS) measurements to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a Fingerprint (FP) map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.
-Additional data may be incorporated into the positioning application, such as the WD's inertia or prior knowledge of the site. These techniques have been shown to significantly improve positioning accuracy. This application avoided these methods, as we assumed no prior site knowledge and did not want to log WD inertia due to privacy concerns. In applications which require higher accuracy, we advise including these methodologies. To improve our position finder without the above methodologies, we implement two novel site-blind techniques: density-penalizing neighbor weighting and floor detection preprocessing.\\
+\indent Our approach uses Received Signal Strength (RSS) measurements to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a FP map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
 \indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients [8]. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
-\indent Our application could be modified for higher accuracy at the cost of mapping time or lower mapping time at the cost of accuracy. We provide quantitative analysis of how different decisions affected the performance of our positioning application, balancing positioning accuracy against scan time for both map generation and client positioning. \\
-\indent This work is organized as follows: we first discuss how FPs are recorded and how the FP database is created; we then discuss our positioning algorithm, describing our distance metrics and algorithm refinements; we then present the performance of our application and compare it with that of other systems; and finally, we discuss possible future research.
+\indent To improve our position finder, we implement two novel site-blind techniques: density-penalizing neighbor weighting and floor detection preprocessing.\\
+\indent Our application could be modified for higher accuracy at the cost of mapping time or lower mapping time at the cost of accuracy. We provide quantitative analysis of how different decisions affected the performance of our positioning application, balancing positioning accuracy against scan time for both map generation and client positioning.
+
 
 \section{Floor Mapping}
+We will now discuss the building environment and the methods we used to generate the FP database.
 \subsection{Environment}
 We mapped two floors of Halligan Hall, the Computer Science building at Tufts University. The floor plans were available to us, but the locations of the wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the median RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have a median RSS of -120 dB. 
  
@@ -80,48 +81,59 @@ Figure 1 examines the MAC addresses visible on the first floor of Halligan, whil
      \caption{Mapped Positions in Halligan}
 \end{figure}
 
-To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure 3. The positions in Figure 3 were determined manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions found using human estimation of the points in Figure 3.\\
+To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure 3. The positions in Figure 3 were determined manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions estimated with reference to the points in Figure 3.\\
 \indent In deciding the number of scans, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using E (discussed in section II.ii.A). Given the similarity of RSS values, we decided to focus on the remaining two factors: time and MAC coverage. \\
 \vspace{5mm}\\
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{cccccc}
-MAC Coverage(\%) & 2 Scans & 10 Scans & \textbf{30 Scans} & 60 Scans & 100 Scans \\
-Trial 1                & 85.3    & 91.2     & \textbf{96.1}     & 100      & 100       \\
-Trial 2                & 88.7    & 90.3     & \textbf{96.8}     & 100      & 100       \\
-Trial 3                & 74.4    & 79.5     & \textbf{89.2}     & 97.6     & 100       \\
-Trial 4                & 59.6    & 84.3     & \textbf{95.5}     & 97.8     & 100       \\
-Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100          
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Scans (1.5s/scan) & 2 & 10 & \textbf{30} & 60 & 100 \\
+\hline
+Time(Hours )               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12\\
+\hline
 \end{tabular}
 }
 \begin{center}
 Table 1
 \end{center}
-\indent Increasing the number of scans improves results, but involves a time tradeoff, as scanning is the most time-consuming part of site survey. With regards to runtime, different WDs had dramatically different scan times, ranging from 0.20 to 2.0 seconds. The table below lists the approximate time to record a floor for each number of scans, assuming the worst-case scan time. The number of locations on each floor was based on the average number of locations facing one direction on the two floors of Halligan Hall.\\
+
+\indent Increasing the number of scans improves results, but involves a time tradeoff, as scanning is the most time-consuming part of site survey. With regards to runtime, different WDs had dramatically different scan times, ranging from 0.20 to 2.0 seconds. Table 1 lists the approximate time to record a floor for each number of scans, assuming the worst-case scan time. The number of locations on each floor was based on the average number of locations facing one direction on the two floors of Halligan Hall.\\
 \vspace{5mm}\\
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{cccccc}
-Scans (1.5s/scan) & 2 & 10 & \textbf{30} & 60 & 100 \\
-Time(Hours )               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+MAC Coverage(\%) & 2 Scans & 10 Scans & \textbf{30 Scans} & 60 Scans & 100 Scans \\
+\hline
+Trial 1                & 85.3    & 91.2     & \textbf{96.1}     & 100      & 100       \\
+\hline
+Trial 2                & 88.7    & 90.3     & \textbf{96.8}     & 100      & 100       \\
+\hline
+Trial 3                & 74.4    & 79.5     & \textbf{89.2}     & 97.6     & 100       \\
+\hline
+Trial 4                & 59.6    & 84.3     & \textbf{95.5}     & 97.8     & 100       \\
+\hline
+Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100          \\
+\hline
 \end{tabular}
 }
 \begin{center}
 Table 2
 \end{center}
 
-\indent We chose a number of scans for site surveying which balanced sufficient RSS precision against worst-case device runtime. Given the similarity of MAC coverage for 30 scans and 100 scans and the runtime implications of each, we opted for 30 scans.\\
+\indent We chose a number of scans for site surveying which balanced sufficient RSS precision against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table 2, for 30 scans and 100 scans and the runtime implications of each, we opted for 30 scans.\\
 \indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 4  (Wi-Fi: IEEE 802.11 b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and the Samsung Galaxy Nexus(Wi-Fi: IEEE 802.11 a/b/g/n). The average distance between each phone's recording of the same physical location was 6.3 dB. This value is notably high compared to an average distance of 1.7 dB between four surveys made using the same phone. Though detrimental to our position finder's accuracy, the decision to map with multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
 \indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [1]. We found an average distance of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with direction for applications requiring higher accuracy.\\
 \indent The set of FPs collected during mapping is used as data for our positioning algorithm. Upon receiving a positioning request containing FP A, the algorithm compares A with each FP in the mapped set, using the FPs most similar to A to estimate A's position on the map.
 
 \section{Positioning Algorithms}
+Many classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [2][3]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
 \subsection{Weighted K-Nearest Neighbor}
-Many classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [2][3]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation.\\
 \indent Consider a set S of FPs  where N=[$n_1$, $n_2$, ..., $n_K$] is the set of K FPs from S nearest to some other point $\rho$ by distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\rho$ is calculated as:
 \begin{equation}
 \label{wknn}
 \hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}\rho'_i
 \end{equation}
-\indent where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, and $\omega_{total}$ is the sum of the weights of all FPs in N. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N[5]. For our implementation, the weight $\omega_i$ of FP $n_i$ is calculated as the inverse of $\sigma(n_i, \rho)$, the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The specific distance metrics used in our implementation are discussed in the next section. We use WKNN because it has been shown to have a higher accuracy than merely the Nearest Neighbor (NN) method, K = 1, yielding best results with K values of 3 or 4 [5]. 
+where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, and $\omega_{total}$ is the sum of the weights of all FPs in N. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N[5]. For our implementation, the weight $\omega_i$ of FP $n_i$ is calculated as the inverse of $\sigma(n_i, \rho)$, the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The specific distance metrics used in our implementation are discussed in the next section. We use WKNN because it has been shown to have a higher accuracy than merely the Nearest Neighbor (NN) method, K = 1, yielding best results with K values of 3 or 4 [5]. 
 
 \subsection{Distance Metrics}
 WKNN is a very flexible classifier, and can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we used to quantify difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs A and B with RSS vectors a=[$a_1$, $a_2$, ... , $a_m$] and b=[$b_1$, $b_2$, ... , $b_n$], respectively. 
