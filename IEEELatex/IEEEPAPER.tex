@@ -121,9 +121,9 @@ Many classifiers are suitable for determining the location of an unknown point g
 \label{wknn}
 \hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}\rho'_i
 \end{equation}
-\indent where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, and $\omega_{total}$ is the sum of the weights of all FPs in N. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N[5]. For our implementation, the weight $\omega_i$ of FP $n_i$ is calculated as the inverse of $\sigma(n_i, \rho)$, the signal distance between $n_i$ and $\rho$ using distance function $\sigma$. The specific distance metrics used in our implementation are discussed in the next section. We use WKNN because it has been shown to have a higher accuracy than merely the Nearest Neighbor (NN) method, K = 1, yielding best results with K values of 3 or 4 [5]. 
+\indent where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, and $\omega_{total}$ is the sum of the weights of all FPs in N. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N[5]. For our implementation, the weight $\omega_i$ of FP $n_i$ is calculated as the inverse of $\sigma(n_i, \rho)$, the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The specific distance metrics used in our implementation are discussed in the next section. We use WKNN because it has been shown to have a higher accuracy than merely the Nearest Neighbor (NN) method, K = 1, yielding best results with K values of 3 or 4 [5]. 
 
-\subsection{Distance Functions}
+\subsection{Distance Metrics}
 WKNN is a very flexible classifier, and can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we used to quantify difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs A and B with RSS vectors a=[$a_1$, $a_2$, ... , $a_m$] and b=[$b_1$, $b_2$, ... , $b_n$], respectively. 
 
 \subsubsection{Euclidean Distance ($\sigma_E$)}
@@ -157,7 +157,7 @@ WKNN is a very flexible classifier, and can incorporate a variety of distance me
 The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates similarity within the WKNN algorithm. As this only examines the MAC addresses, this is a quick yet coarse method to determine distances between locations.
 
 \subsubsection{Linear Combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$)}
-\indent Since the penalty-weighted Euclidean distance metric and the inverse Jaccard coefficient both reveal valuable information about the difference between RSS vectors, we propose a new distance function that is the linear combination of these two measures, defined as follows:
+\indent Since the penalty-weighted Euclidean distance metric and the inverse Jaccard coefficient both reveal valuable information about the difference between RSS vectors, we propose a new distance metric that is the linear combination of these two measures, defined as follows:
 \begin{equation}
 \label{combined}
 \sigma_{E'+J^{-1}}(A, B) = \beta_1*\sigma_{E'}(A, B)+\beta_2*\sigma_{J^{-1}}(A, B)
@@ -181,9 +181,9 @@ W_d=\phi*\sum\limits_{i}\{\
 \indent where $\phi$ is a constant, $d_i$ is the $i^{th}$ fingerprint in the database, and $\Gamma$ is the neighbor threshold. Through iterative testing, we determined the optimal value of $\phi$ to be 0.08 and $\Gamma$ to be 20 meters. The minimum neighbor count is always one, as a point is always its own neighbor; this ensures a non-zero value in all cases. This factor increases the importance of points with low neighbor counts, helping improve accuracy in areas that are sparsely mapped. 
 
 \subsubsection{Floor Detection Pre-Processing}
-\indent Before running WKNN with a more complex distance function, we first run it using only the inverse Jaccard coefficient in order to determine the floor of our test point. We do this because calculating the inverse Jaccard coefficient between two sets of MAC addresses does not require any calculations involving signal strength, so it does not take as much computational time as calculating Euclidean distance. Once we have determined the floor of our test point, we find its coordinates by running WKNN with distance $\sigma_C$ (defined in the next section), only iterating over fingerprints in the database on the correct floor. While this change does not yield significant time improvements given our test environment that only contains two floors, its benefits become more evident in an environment with several floors and buildings.
+\indent Before running WKNN with a more complex distance metric, we first run it using only the inverse Jaccard coefficient in order to determine the floor of our test point. We do this because calculating the inverse Jaccard coefficient between two sets of MAC addresses does not require any calculations involving signal strength, so it does not take as much computational time as calculating Euclidean distance. Once we have determined the floor of our test point, we find its coordinates by running WKNN with distance $\sigma_C$ (defined in the next section), only iterating over fingerprints in the database on the correct floor. While this change does not yield significant time improvements given our test environment that only contains two floors, its benefits become more evident in an environment with several floors and buildings.
 
-\subsection{Composite Distance Function $\sigma_C$}
+\subsection{Composite Distance Metric $\sigma_C$}
 \indent Our WKNN measures distance as a linear combination of Euclidean distance with penalty, $\sigma_{E'}$,  the inverse Jaccard distance $\sigma_{J^{-1}}$, and the neighbor count weighting, $W$,  given as follows:
 \begin{equation}
 \label{composite}
@@ -209,11 +209,11 @@ The accuracy of our positioning algorithm is dependent on the number of scans th
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.5\textwidth]{pull_errors.png}
-   \caption{Accuracy of composite distance function for various numbers of client scans}
+   \caption{Accuracy of composite distance metric for various numbers of client scans}
 \end{figure}
 
 \subsection{Distance Metric Comparisons}
-We tested our WKNN algorithm iteratively with the coefficient training set and found the algorithm had the best performance when K = 3. Figure 6 shows the observed accuracy of our WKNN algorithm using four different distance metrics. As the graph shows, the standard Euclidean distance function performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-Weighted Euclidean Distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the error to 2.78m. However, the linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the Penalty-Weighted Euclidean distance metric.
+We tested our WKNN algorithm iteratively with the coefficient training set and found the algorithm had the best performance when K = 3. Figure 6 shows the observed accuracy of our WKNN algorithm using four different distance metrics. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-Weighted Euclidean Distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the error to 2.78m. However, the linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the Penalty-Weighted Euclidean distance metric.
 
 \begin{figure}[h!]
   \centering
@@ -224,7 +224,7 @@ We tested our WKNN algorithm iteratively with the coefficient training set and f
 
 \subsection{Map-Aware Algorithm Refinement}
 
-We add our Neighbor-Weighting as a parameter to our composite distance function ($\sigma_C$). Overall, Neighbor-Weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, Neighbor-Weighting increases the average error by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error.\\		
+We add our Neighbor-Weighting as a parameter to our composite distance metric ($\sigma_C$). Overall, Neighbor-Weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, Neighbor-Weighting increases the average error by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error.\\		
 \indent Figure 7 shows the effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors.
 
 \begin{figure}[h!]
