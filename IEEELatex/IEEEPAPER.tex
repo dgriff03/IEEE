@@ -34,7 +34,7 @@ There is a growing need for wireless devices to have location context for applic
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device?s position can be particularly valuable information for both the user and some external systems. A potential use case for a consumer is locating a friend within a building, whereas a company may take the opportunity to provide location-dependent advertisements.\\
+As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device's position can be particularly valuable information for both the user and some external systems. A potential use case for a consumer is locating a friend within a building, whereas a company may take the opportunity to provide location-dependent advertisements.\\
 \indent Global Navigation Satellite Systems (GNSS) such as GPS achieve acceptable accuracy outdoors, but these systems fail within the No-Line of Sight (NLoS) conditions experienced indoors [14]. GNSS use traditional methods of positioning such as Trilateration or Triangulation to determine the position of a wireless device. Although high-accuracy indoor positioning has been achieved using both of these methods, specialized hardware is required [10], and both methods yield high error when using Wi-Fi data due to the complexity of indoor Wi-Fi signal propagation. \\
 \indent Most indoor positioning systems make use of Wi-Fi networks, as they are widely available and natively supported by most hardware. This makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model [5], and manual site-survey. Site-simulation allows for rapid site integration but requires prior knowledge of the position of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site. \\
 \indent Several indoor positioning systems have been implemented with success. The RADAR positioning system [11] utilizes fingerprinting, achieving an average error of 3-5 meters; however, this was performed within a sterile testing environment. Another method, based on site-simulation, achieved high accuracy by incorporating additional building information [5]. These environments differ from those found in a commercial setting.\\
@@ -85,7 +85,7 @@ To build the FP database, the average of thirty RSS scans is logged for each pos
 \hline
 Scans (1.5s/scan) & 2 & 10 & \textbf{30} & 60 & 100 \\
 \hline
-Time(Hours )               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12\\
+Time (Hours)               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12\\
 \hline
 \end{tabular}
 }
@@ -98,7 +98,7 @@ Table 1
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-MAC Coverage(\%) & 2 Scans & 10 Scans & \textbf{30 Scans} & 60 Scans & 100 Scans \\
+MAC Coverage (\%) & 2 Scans & 10 Scans & \textbf{30 Scans} & 60 Scans & 100 Scans \\
 \hline
 Trial 1                & 85.3    & 91.2     & \textbf{96.1}     & 100      & 100       \\
 \hline
@@ -117,7 +117,7 @@ Table 2
 \end{center}
 
 \indent We chose a number of scans for site surveying which balanced sufficient RSS precision against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table 2, for 30 scans and 100 scans and the runtime implications of each, we opted for 30 scans.\\
-\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 4  (Wi-Fi: IEEE 802.11 b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and the Samsung Galaxy Nexus(Wi-Fi: IEEE 802.11 a/b/g/n). The average distance between each phone's recording of the same physical location was 6.3 dB. This value is notably high compared to an average distance of 1.7 dB between four surveys made using the same phone. Though detrimental to our position finder's accuracy, the decision to map with multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
+\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and the Samsung Galaxy Nexus(Wi-Fi: IEEE 802.11 a/b/g/n). The average distance between each phone's recording of the same physical location was 6.3 dB. This value is notably high compared to an average distance of 1.7 dB between four surveys made using the same phone. Though detrimental to our position finder's accuracy, the decision to map with multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
 \indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [1]. We found an average distance of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with direction for applications requiring higher accuracy.\\
 \indent The set of FPs collected during mapping is used as data for our positioning algorithm. Upon receiving a positioning request containing FP A, the algorithm compares A with each FP in the mapped set, using the FPs most similar to A to estimate A's position on the map.
 
@@ -164,7 +164,7 @@ where $\alpha$ is a constant value. By introducing a new coefficient, we enable 
 \indent The Jaccard coefficient is equal to the number of elements in the intersection divided by the number of elements in the union [7]. The larger the Jaccard coefficient, the greater the similarity between the two sets. We use the inverse Jaccard coefficient with our implementation of WKNN, as small values indicate similarity within the WKNN algorithm. The inverse Jaccard coefficient is calculated as:  
 \begin{equation}
 \label{jaccard}
-\sigma_{J^{-1}}(A, B) = (\frac{|a\cap b|}{a\cup b})^{-1}
+\sigma_{J^{-1}}(A, B) = (\frac{|a\cap b|}{|a\cup b|})^{-1}
 \end{equation}
 The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates similarity within the WKNN algorithm. As this only examines the MAC addresses, this is a quick yet coarse method to determine distances between locations.
 
@@ -280,7 +280,7 @@ This performance improvement would be extremely significant in a large-scale com
 
 
 \section{Conclusion}
-Our positioning system addressing many of the obstacles to widespread indoor positioning system implementation. The positioning system we implement is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average error of 2.66m, satisfying the requirements of most applications. We propose two metrics for use with the WKNN algorithm, Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm modification for improved scalability, Floor Detection Preprocessing. Future work could integrate other algorithm improvement techniques, such as Double Gaussian Distribution processing, and could investigate the performance of user-feedback in the mapping process.
+Our positioning system addressing many of the obstacles to widespread indoor positioning system implementation. The positioning system we implement is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average error of 2.66m, satisfying the requirements of most applications. We propose two metrics for use with the WKNN algorithm: Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm modification for improved scalability, Floor Detection Preprocessing. Future work could integrate other algorithm improvement techniques, such as Double Gaussian Distribution processing, and could investigate the performance of user-feedback in the mapping process.
 
 
 \section*{Acknowledgment}
