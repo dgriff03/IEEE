@@ -227,7 +227,28 @@ The accuracy of our positioning algorithm is dependent on the number of scans th
 \end{figure}
 
 \subsection{Distance Metric Comparisons}
-We tested our WKNN algorithm iteratively with the coefficient training set and found the algorithm had the best performance when K = 3. Figure 6 shows the observed accuracy of our WKNN algorithm using four different distance metrics. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-Weighted Euclidean Distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the error to 2.78m. However, the linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the Penalty-Weighted Euclidean distance metric.
+We tested our WKNN algorithm iteratively with the coefficient training set and found the algorithm had the best performance when K = 3. Figure 6 shows the observed accuracy of our WKNN algorithm using four different distance metrics. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-Weighted Euclidean Distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the error to 2.78m. However, the linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric.
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|c|c|}
+\hline
+Distance Metric 	& Mean Error($m$) & Standard Deviation($m^{2}$) \\
+\hline
+Inverse Jaccard Coefficient 	& 4.75  & 3.49\\
+\hline
+Euclidean distance	 & 3.56   & 2.31\\
+\hline
+Penalty-Weighted Euclidean distance 	& 2.87   & 2.10\\
+\hline
+Linear Combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$)  	& 2.78   & 1.76\\
+\hline
+Composite Distance Metric& 2.66   & 1.44\\
+\hline
+\end{tabular}
+}
+\begin{center}
+Table 3
+\end{center}
 
 \begin{figure}[h!]
   \centering
@@ -240,6 +261,7 @@ We tested our WKNN algorithm iteratively with the coefficient training set and f
 
 We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$). The observed accuracy of this metric can be seen in Figure 6. Overall, neighbor weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, neighbor weighting increases the average error by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error.\\		
 \indent Figure 7 shows the effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors.This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required.
+
 
 \begin{figure}[h!]
   \centering
