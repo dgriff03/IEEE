@@ -10,42 +10,38 @@
 \title{Device-Agnostic Wi-Fi Fingerprint Positioning for Consumer Applications}
 
 \author{\IEEEauthorblockN{Daniel Griffin}
-\IEEEauthorblockA{Tufts University\\
-School of Engineering}
+\IEEEauthorblockA{Tufts University}
 \and
 \IEEEauthorblockN{Hunter Wapman}
-\IEEEauthorblockA{Tufts University\\
-School of Arts and Sciences}
+\IEEEauthorblockA{Tufts University}
 \and
 \IEEEauthorblockN{Brett Fischler}
-\IEEEauthorblockA{Tufts University\\
-School of Engineering}
+\IEEEauthorblockA{Tufts University}
 \and
 \IEEEauthorblockN{Tyler Lubeck}
-\IEEEauthorblockA{Tufts University\\
-School of Engineering}}
+\IEEEauthorblockA{Tufts University}}
 
 \maketitle
 
 \begin{abstract}
-There is a growing need for wireless devices to have location context for applications such as navigation, emergency location services, and contextual advertisements. Although GPS and the cellular network provide viable outdoor accuracy, they are unsuited to indoor positioning. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system is quick and cheap to implement, and can be used in fixed environments. We implement several optimized distance metrics as well as two novel map-aware methods, Density-Penalizing Neighbor Weighting and Jaccard floor preprocessing, for use with the Weighted K-Nearest Neighbor algorithm. Our application is able to position Android devices with an accuracy of 2.66m, requiring approximately 75 minutes of site-survey per floor.
+There is a growing need to position wireless devices in the real world for applications such as navigation, emergency location services, and contextual advertisements. Though GPS and the cellular network provide viable outdoor accuracy, these approaches are unsuited for indoor positioning. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system is quick to implement and can be used in prexisting fixed environments. We propose several optimized distance metrics as well as two novel environment based methods, a density penalty factor and a floor preprocessing technique, for use with the Weighted K-Nearest Neighbor algorithm. Our application has a site-survey time of 75 minutes per floor and an average error of 2.66m.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device's position can be particularly valuable information for both the user and some external systems. A potential use case for a consumer is locating a friend within a building, whereas a company may take the opportunity to provide location-dependent advertisements.\\
-\indent Global Navigation Satellite Systems (GNSS) such as GPS achieve acceptable accuracy outdoors, but these systems fail within the No-Line of Sight (NLoS) conditions experienced indoors [14]. GNSS use traditional methods of positioning such as Trilateration or Triangulation to determine the position of a wireless device. Although high-accuracy indoor positioning has been achieved using both of these methods, specialized hardware is required [10], and both methods yield high error when using Wi-Fi data due to the complexity of indoor Wi-Fi signal propagation. \\
-\indent Most indoor positioning systems make use of Wi-Fi networks, as they are widely available and natively supported by most hardware. This makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model [5], and manual site-survey. Site-simulation allows for rapid site integration but requires prior knowledge of the position of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site. \\
-\indent Several indoor positioning systems have been implemented with success. The RADAR positioning system [11] utilizes fingerprinting, achieving an average error of 3-5 meters; however, this was performed within a sterile testing environment. Another method, based on site-simulation, achieved high accuracy by incorporating additional building information [5]. These environments differ from those found in a commercial setting.\\
-\indent We design and implement an indoor positioning system using Wi-Fi signals based on the site-survey method within a fixed commercial environment. Our system makes use of smart phone devices to estimate position using the nearest neighbor algorithm. We further propose several novel distance metrics, as well as two environment-based algorithm-modifications to improve accuracy. Our system is the first Wi-Fi based indoor positioning system utilizing consumer devices to obtain both a high level of accuracy and low site-survey time in a commercial environment with fixed infrastructure.\\
-\indent This work is organized as follows: we first discuss the aims of our research; followed by a discussion of how Fingerprints (FP) are recorded and how the FP database is created; we then discuss our positioning algorithm, describing our distance metrics and algorithm refinements; we then present the performance of our application and compare it with that of other systems; and finally, we discuss possible future research.
+As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device's position can be particularly valuable to a consumer or business. A consumer could locate a friend within a building; a business could provide location-dependent advertisements.\\
+\indent Global Navigation Satellite Systems (GNSS), like GPS, achieve acceptable accuracy outdoors, but perform poorly indoors, under No-Line of Sight (NLoS) conditions  [1]. GNSS use Trilateration or Triangulation to determine the position of a wireless device. Although high-accuracy indoor positioning has been achieved using both of these methods, specialized hardware is required [2] and yield high error using Wi-Fi. \\
+\indent Most indoor positioning systems use Wi-Fi networks, as they are widely available and supported by most hardware. This makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model [3], and manual site-survey. Site-simulation allows for rapid site integration but requires prior knowledge of the position of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site. \\
+\indent Several indoor positioning systems have been successfully implemented. The RADAR positioning system [4] utilizes fingerprinting, achieving an average error of 3-5 meters within a controlled environment. Another method, based on site-simulation, achieves high accuracy by incorporating additional building information [3]. While these systems were successful, they were implemented in environments differing from a commercial setting.\\
+\indent We design and implement an indoor positioning system using Wi-Fi signals based on the site-survey method for use within a fixed commercial environment. Our system uses the nearest neighbor algorithm to estimate the position of smart phone devices. We further propose several novel distance metrics, as well as two environment-based algorithm-modifications to improve accuracy. Our system achieves both a competitive level of accuracy and low site-survey time.\\
+\indent This work is organized as follows: we first discuss the aims of our research, followed by a discussion of how Fingerprints (FP) are recorded and how the FP database is created. We then discuss our positioning algorithm, describing our distance metrics and algorithm refinements, before presenting the performance of our application and comparing it against other systems. Finally, we discuss areas for future research.
 
 \section{Indoor Positioning System}
 The basic requirement of an indoor positioning system is that it provides precision to the degree of a room, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
 \indent We implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. 
 \indent Our approach uses Received Signal Strength (RSS) measurements to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a FP map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
-\indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients [8]. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
+\indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients [5]. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
 \indent We provide quantitative analyses of how different decisions, such as the number of scans and floor-detection preprocessing, affected the runtime and accuracy of our positioning application. Our application could be modified for higher accuracy at the cost of mapping time or lower mapping time at the cost of accuracy. 
 
 \section{Floor Mapping}
@@ -126,18 +122,18 @@ Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100
 
 \indent We chose a number of scans for site surveying which balanced sufficient RSS precision against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table 2, for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
 \indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and the Samsung Galaxy Nexus(Wi-Fi: IEEE 802.11 a/b/g/n). The average distance between each phone's recording of the same physical location was 6.3 dB. This value is notably high compared to an average distance of 1.7 dB between four surveys made using the same phone. Though detrimental to our position finder's accuracy, the decision to map with multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
-\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [1]. We found an average distance of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with direction for applications requiring higher accuracy.\\
+\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [6]. We found an average distance of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with direction for applications requiring higher accuracy.\\
 \indent The set of FPs collected during mapping is used as data for our positioning algorithm. Upon receiving a positioning request containing FP A, the algorithm compares A with each FP in the mapped set, using the FPs most similar to A to estimate A's position on the map.
 
 \section{Positioning Algorithms}
-Many classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [2][3]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improved our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
+Many classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [7][8]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improved our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
 \subsection{Weighted K-Nearest Neighbor}
 \indent Consider a set S of FPs  where N=[$n_1$, $n_2$, ..., $n_K$] is the set of K FPs from S nearest to some other point $\rho$ by distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\rho$ is calculated as:
 \begin{equation}
 \label{wknn}
 \hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}\rho'_i, \quad w_i = \sigma(n_i, \rho)^{-1}
 \end{equation}
-where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N. The specific distance metrics used in our implementation are discussed in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 [5]. 
+where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N. The specific distance metrics used in our implementation are discussed in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 [3]. 
 
 \subsection{Distance Metrics}
 WKNN is a very flexible classifier, and can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we used to quantify difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs A and B with RSS vectors a=[$a_1$, $a_2$, ... , $a_m$] and b=[$b_1$, $b_2$, ... , $b_n$], respectively. 
@@ -169,7 +165,7 @@ where $I_{min}$ is the lowest recorded RSS measurement in the FP database. In mo
 where $\alpha$ is a constant value. By introducing a new coefficient, we enable our algorithm to assign a different weight to mismatching MAC addresses.  Through iterative testing, we determined the best value of $\alpha$ to be 0.25. This allows for an increased distance for locations with non-matching MAC addresses but limits the effect of false RSS matches.
 	
 \subsubsection{Inverse Jaccard Coefficient ($\sigma_{J^{-1}}$)}
-\indent The Jaccard coefficient is equal to the number of elements in the intersection divided by the number of elements in the union [7]. The larger the Jaccard coefficient, the greater the similarity between the two sets. We use the inverse Jaccard coefficient with our implementation of WKNN, as small values indicate similarity within the WKNN algorithm. The inverse Jaccard coefficient is calculated as:  
+\indent The Jaccard coefficient is equal to the number of elements in the intersection divided by the number of elements in the union [10]. The larger the Jaccard coefficient, the greater the similarity between the two sets. We use the inverse Jaccard coefficient with our implementation of WKNN, as small values indicate similarity within the WKNN algorithm. The inverse Jaccard coefficient is calculated as:  
 \begin{equation}
 \label{jaccard}
 \sigma_{J^{-1}}(A, B) = (\frac{|a\cap b|}{|a\cup b|})^{-1}
@@ -218,7 +214,7 @@ where $\beta_1$ and $\beta_2$ are constants. This metric allows for a combinatio
 Through empirical evaluation, we determined that our positioning application has an average error of 2.66m, meeting the requirements of most commercial applications. We break our analysis into three sections. First, we discuss our testing methodology. Second, we compare our four distance metrics: Euclidean distance ( $\sigma$), penalty-weighted Euclidean distance ( $\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of$\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). Finally, we analyze our map-aware algorithm refinements: Floor Detection Preprocessing and Density-Penalizing Neighbor Weighting.
 
 \subsection{Testing Methodology}
-We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm, which efficiently creates a Poisson Distribution of points within the mapped regions [6] displayed in Figure 4. All FPs in the testing set were recorded using the HTC One m7. 
+We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm, which efficiently creates a Poisson Distribution of points within the mapped regions [11] displayed in Figure 4. All FPs in the testing set were recorded using the HTC One m7. 
 
 \begin{figure}[H]
   \centering
@@ -284,7 +280,7 @@ We add our Density-Penalizing Neighbor Weighting technique as a parameter to our
 This performance improvement would be extremely significant in a large-scale commercial application.
 
 \section{Discussion}
-\indent Our positioning application has runtime and accuracy similar to other fingerprint-based systems [10]. Although there are fingerprinting positioning systems with higher accuracy, many utilize application-specific hardware, whereas our application operates with  consumer hardware and no assumed site information.\\
+\indent Our positioning application has runtime and accuracy similar to other fingerprint-based systems [2]. Although there are fingerprinting positioning systems with higher accuracy, many utilize application-specific hardware, whereas our application operates with  consumer hardware and no assumed site information.\\
 \indent One specific example is the Microsoft RADAR system, which utilizes a basic KNN algorithm with RF signals. Although several systems have come out since RADAR that are improvements, the system achieved similar average error distances, 3 - 5 meters, while operating on a single, highly arranged floor, with the three base stations placed by the developing team, and a single set of hardware utilized. Our system demonstrates that this level of accuracy can be realized with consumer hardware in a commercial-like setting. Similar to how RADAR was able to utilize techniques such as continual user tracking, as well as multiple radio maps for different environments such as time of day [12], we believe our implementation could be improved with these methods while still utilizing a device agnostic system.\\
 \indent A system proposed in 2013 uses improved double-peak Gaussian distributions and a probabilistic approach to determine position. This approach used a single device for mapping, and reports an average error of 1.5 meters [13]. While this is a significantly higher accuracy, the techniques used could be incorporated into our positioning application to achieve a similar accuracy.\\ 
 \indent Beyond increasing scan numbers, several other methods and data could be incorporated to further improve our system accuracy, including direction in site-survey, WD inertia, and prior knowledge of the site. These options are left as future work.
@@ -305,64 +301,62 @@ We would like to thank our research advisor Professor Mai Vu of the Tufts Univer
 
 \begin{thebibliography}{99}
 
-\bibitem{1} Sayed, Ali H., Alireza Tarighat, and Nima Khajehnouri.,
-"Challenges Faced in Developing Techniques for Accurate Wireless Location Information."
-\emph{IEEE Signal Processing Magazine. IEEE, 1}, July 2005. Web. 11 Mar. 2015.
- 
-\bibitem{2} Sayed, Ali H., Alireza Tarighat, and Nima Khajehnouri.,
-"Performance Comparison of Indoor Positioning Techniques Based on Location Fingerprinting in Wireless Networks."
-\emph{IEEE Xplore}, 1 Jan. 2005. Web. 11 Mar. 2015. 
- 
-\bibitem{3} Chaudhuri, K., D. Sanghi, and P. Bhagwat. ,
-"Location Determination of a Mobile Device Using IEEE 802.11b Access Point Signals."
-\emph{IEEE Xplore. IEEE}, 16 Mar. 2003. Web. 11 Mar. 2015.
 
-\bibitem{4} Lakmali, B.D.S., and Dias, D. ,
-"Database Correlation for GSM Location in Outdoor and Indoor Environments."
+\bibitem{1} Lakmali, B.D.S. and D. Dias,
+'Database Correlation for GSM Location in Outdoor and Indoor Environments',
 \emph{Information and Automation for Sustainability, 2008. ICIAFS 2008. 4th International Conference on, vol., no., pp.42,47,}, 12-14 Dec. 2008.
- 
-\bibitem{5} Kokkinis, Akis; Raspopoulos, Marios; Kanaris, Loizos; Liotta, Antonio; Stavrou, Stavros,
-"Map-aided fingerprint-based indoor positioning,"
-\emph{Personal Indoor and Mobile Radio Communications (PIMRC), 2013 IEEE 24th International Symposium on}, vol., no., pp.270,274, 8-11 Sept. 2013.
 
-\bibitem{6} Dunbar, Daniel, and Greg Humphreys.,
-"A Spatial Data Structure for Fast Poisson-Disk Sample Generation."
-\emph{www.cs.virginia.edu. University of Virginia},  1 Jan. 2006. Web. 11 Mar. 2015. 
-
-\bibitem{7} Machaj, Juraj, Peter Brida, and Robert Piche.,
-"Rank Based Fingerprinting Algorithm for Indoor Positioning."
-\emph{ International Conference on Indoor Positioning and Indoor Navigation IPIN, Guimaraes, Portugal},  21-23 September 2011. Web. 12 Mar. 2015.
-
-\bibitem{8} Fielding, R.,
-"Architectural Styles and the Design of Network-based Software Architectures."
-\emph{ (Unpublished Doctoral dissertation). University of California, Irvine.}, 200
-
-\bibitem{9} Kemppi, P.; Nousiainen, S.
-"Database Correlation Method for Multi-System Positioning,"
-\emph{Vehicular Technology Conference, 2006. VTC 2006-Spring. IEEE 63rd },  vol.2, no., pp.866,870, 7-10 May 2006.
-
-\bibitem{10} Hui Liu, Houshang Darabi, Pat Banerjee, and Jing Li.,
-"Survey of Wireless Indoor Positioning Techniques and Systems,"
+\bibitem{2} H, Liu, H. Darabi, P. Banerjee, and J. Li,
+'Survey of Wireless Indoor Positioning Techniques and Systems',
 \emph{ (Systems, Man, and Cybernetics, Part C: Applications and Reviews, IEEE Transactions on.}, vol.37, no.6, pp.1067,1080, Nov. 2007 
 
-\bibitem{11} P. Bahl and V. N. Padmanabhan,
-RADAR: An in-building RF-based user location and tracking system,
+\bibitem{3} A. Kokkinis, M. Raspopoulos, L. Kanaris, A. Liotta and S. Stavrou,
+'Map-aided fingerprint-based indoor positioning',
+\emph{Personal Indoor and Mobile Radio Communications (PIMRC), 2013 IEEE 24th International Symposium on}, vol., no., pp.270,274, 8-11 Sept. 2013.
+
+\bibitem{4} P. Bahl and V. N. Padmanabhan,
+'RADAR: An in-building RF-based user location and tracking system',
 \emph{in Proc. IEEE INFOCOM}, 2000, Mar., vol. 2, pp. 775-784.
 
+\bibitem{5} R. Fielding,
+'Architectural Styles and the Design of Network-based Software Architectures',
+\emph{ (Unpublished Doctoral dissertation). University of California, Irvine.}, 200
+
+\bibitem{6}  A. Sayed, A. Tarighat, and N. Khajehnouri,
+'Challenges Faced in Developing Techniques for Accurate Wireless Location Information',
+\emph{IEEE Signal Processing Magazine. IEEE, 1}, July 2005. Web. 11 Mar. 2015.
+ 
+\bibitem{7} A. Sayed, A. Tarighat, and N. Khajehnouri,
+'Performance Comparison of Indoor Positioning Techniques Based on Location Fingerprinting in Wireless Networks',
+\emph{IEEE Xplore}, 1 Jan. 2005. Web. 11 Mar. 2015. 
+ 
+\bibitem{8} K. Chaudhuri, D. Sanghi, and P. Bhagwat,
+'Location Determination of a Mobile Device Using IEEE 802.11b Access Point Signals',
+\emph{IEEE Xplore. IEEE}, 16 Mar. 2003. Web. 11 Mar. 2015.
+ 
+\bibitem{9} P. Kemppi and S. Nousiainen,
+'Database Correlation Method for Multi-System Positioning',
+\emph{Vehicular Technology Conference, 2006. VTC 2006-Spring. IEEE 63rd },  vol.2, no., pp.866,870, 7-10 May 2006.
+
+\bibitem{10} D. Dunbar and G. Humphreys,
+'A Spatial Data Structure for Fast Poisson-Disk Sample Generation',
+\emph{www.cs.virginia.edu. University of Virginia},  1 Jan. 2006. Web. 11 Mar. 2015. 
+
+\bibitem{11} J. Machaj,, P. Brida, and R. Piche,
+'Rank Based Fingerprinting Algorithm for Indoor Positioning',
+\emph{ International Conference on Indoor Positioning and Indoor Navigation IPIN, Guimaraes, Portugal},  21-23 September 2011. Web. 12 Mar. 2015.
+
 \bibitem{12} P. Bahl and V. N. Padmanabhan,
-Enhancements to the RADAR user location and tracking system,
+'Enhancements to the RADAR user location and tracking system',
 \emph{Microsoft Corp., Tech. Rep. MSR-TR- 2000,12}, Feb. 2000.
 
-\bibitem{13} Chen, Lina, Binghao Li, Kai Zhao, Chris Rizos, and Zhengqi Zheng,
-"An Improved Algorithm to Generate a Wi-Fi Fingerprint Database for Indoor Positioning."
+\bibitem{13} L. Chen, B. Li, K. Zhao, C. Rizos, and Z. Zheng,
+'An Improved Algorithm to Generate a Wi-Fi Fingerprint Database for Indoor Positioning',
 \emph{Sensors (Basel, Switzerland). Molecular Diversity Preservation International (MDPI)}, 8 Aug. 2013. Web. 03 Apr. 2015.
 
 
 \end{thebibliography}
 
-
-
-% that's all folks
 \end{document}
 
 
