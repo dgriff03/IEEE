@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  27 APR 2015 14:52
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  27 APR 2015 17:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -336,41 +336,44 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <APContour.png, id=10, 400.49625pt x 194.7275pt>
 File: APContour.png Graphic file (type png)
  <use APContour.png>
-Package pdftex.def Info: APContour.png used on input line 54.
+Package pdftex.def Info: APContour.png used on input line 52.
 (pdftex.def)             Requested size: 258.0pt x 125.45117pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 54--55
+Overfull \hbox (6.0pt too wide) in paragraph at lines 52--53
  [][] 
  []
 
 <dbContour.png, id=12, 389.455pt x 202.7575pt>
 File: dbContour.png Graphic file (type png)
  <use dbContour.png>
-Package pdftex.def Info: dbContour.png used on input line 61.
+Package pdftex.def Info: dbContour.png used on input line 59.
 (pdftex.def)             Requested size: 258.0pt x 134.32465pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 61--62
+Overfull \hbox (6.0pt too wide) in paragraph at lines 59--60
  [][] 
  []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 <firstFloor.png, id=13, 803.0pt x 501.875pt>
 File: firstFloor.png Graphic file (type png)
  <use firstFloor.png>
-Package pdftex.def Info: firstFloor.png used on input line 71.
+Package pdftex.def Info: firstFloor.png used on input line 69.
 (pdftex.def)             Requested size: 258.0pt x 161.2542pt.
 
 <secondFloor.png, id=14, 803.0pt x 501.875pt>
 File: secondFloor.png Graphic file (type png)
  <use secondFloor.png>
-Package pdftex.def Info: secondFloor.png used on input line 72.
+Package pdftex.def Info: secondFloor.png used on input line 70.
 (pdftex.def)             Requested size: 258.0pt x 161.2542pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 71--73
+Overfull \hbox (6.0pt too wide) in paragraph at lines 69--71
  [][] 
  []
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 71--73
+Overfull \hbox (6.0pt too wide) in paragraph at lines 69--71
  [] 
  []
 
@@ -378,60 +381,68 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 71--73
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--78
+Underfull \hbox (badness 10000) in paragraph at lines 74--76
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--97
+Underfull \vbox (badness 1107) has occurred while \output is active []
 
- []
-
-[2 <./APContour.png> <./dbContour.png> <./firstFloor.png> <./secondFloor.png>]
-[3] [4] <testpoints.png, id=37, 573.14125pt x 207.77625pt>
+ [2 <./APContour.png> <./dbContour.png> <./firstFloor.png> <./secondFloor.png>]
+ [3]
+[4] <testpoints.png, id=37, 573.14125pt x 207.77625pt>
 File: testpoints.png Graphic file (type png)
-
-<use testpoints.png>
-Package pdftex.def Info: testpoints.png used on input line 221.
+ <use testpoints.png>
+Package pdftex.def Info: testpoints.png used on input line 217.
 (pdftex.def)             Requested size: 258.0pt x 93.53014pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 221--222
+Overfull \hbox (6.0pt too wide) in paragraph at lines 217--218
  [][] 
  []
 
 <pull_errors.png, id=38, 578.16pt x 433.62pt>
 File: pull_errors.png Graphic file (type png)
  <use pull_errors.png>
-Package pdftex.def Info: pull_errors.png used on input line 229.
+Package pdftex.def Info: pull_errors.png used on input line 225.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 229--230
+Overfull \hbox (6.0pt too wide) in paragraph at lines 225--226
  [][] 
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 <distance_comparison.png, id=39, 578.16pt x 433.62pt>
 File: distance_comparison.png Graphic file (type png)
 
 <use distance_comparison.png>
-Package pdftex.def Info: distance_comparison.png used on input line 262.
+Package pdftex.def Info: distance_comparison.png used on input line 258.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 262--263
+Overfull \hbox (6.0pt too wide) in paragraph at lines 258--259
  [][] 
  []
 
-[5 <./testpoints.png> <./pull_errors.png> <./distance_comparison.png>]
-<time_comparison.png, id=48, 578.16pt x 433.62pt>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[5 <./testpoints.png> <./pull_errors.png>]
+<time_comparison.png, id=47, 578.16pt x 433.62pt>
 File: time_comparison.png Graphic file (type png)
  <use time_comparison.png>
-Package pdftex.def Info: time_comparison.png used on input line 276.
+Package pdftex.def Info: time_comparison.png used on input line 272.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 276--277
+Overfull \hbox (6.0pt too wide) in paragraph at lines 272--273
  [][] 
  []
 
-[6 <./time_comparison.png>]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6 <./distance_comparison.png> <./time_comparison.png>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -445,38 +456,34 @@ Before submitting the final camera ready copy, remember to:
 
 [7
 
-] (./IEEEPAPER.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+] (./IEEEPAPER.aux) ) 
 Here is how much of TeX's memory you used:
- 3821 strings out of 493315
- 57401 string characters out of 6137904
- 129085 words of memory out of 5000000
+ 3822 strings out of 493315
+ 57407 string characters out of 6137904
+ 130219 words of memory out of 5000000
  7204 multiletter control sequences out of 15000+600000
- 43318 words of font info for 92 fonts, out of 8000000 for 9000
+ 44396 words of font info for 93 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  38i,22n,26p,1004b,254s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
-live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texli
-ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive
-/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2
-013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/201
-3/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2013/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2013/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2013/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2013/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2013/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2013/texmf-dist/fon
-ts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/u
-rw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/
-utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.pf
-b>
-Output written on IEEEPAPER.pdf (7 pages, 994050 bytes).
+{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8
+r.enc}</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10
+.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pf
+b></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb>
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></
+usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></us
+r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
+local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/loc
+al/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
+texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/tex
+live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
+ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texliv
+e/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/
+2013/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf
+-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/fon
+ts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/u
+rw/times/utmri8a.pfb>
+Output written on IEEEPAPER.pdf (7 pages, 994053 bytes).
 PDF statistics:
  112 PDF objects out of 1000 (max. 8388607)
  71 compressed objects within 1 object stream

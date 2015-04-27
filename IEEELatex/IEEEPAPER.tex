@@ -38,31 +38,29 @@ As the number of wireless computing devices grows, there is a corresponding need
 \indent This paper is organized as follows: we first state the aims of our work, followed by a discussion of how Fingerprints (FP) are recorded and how the FP database is created. We then discuss our positioning algorithm, describing the distance metrics and algorithm refinements, before presenting the performance of our implementation and comparing it against other systems. Finally, we discuss areas for future work.
 
 \section{Indoor Positioning System}
-The basic requirement of an indoor positioning system is that it provides precision to the degree of a room, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
-\indent We implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. 
-\indent Our approach uses Received Signal Strength (RSS) measurements to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a FP map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
+The basic requirements for this indoor positioning system are to provide room-level precision, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
+\indent We design and implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. Our approach uses Received Signal Strength (RSS) measurements from a Wi-Fi network to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a Fingerprint (FP) map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
 \indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients [5]. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
-\indent We provide quantitative analyses of how different decisions, such as the number of scans and floor-detection preprocessing, affected the runtime and accuracy of our positioning application. Our application could be modified for higher accuracy at the cost of mapping time or lower mapping time at the cost of accuracy. 
-
+\indent We provide quantitative analyses of how different decisions, such as the number of scans and floor-detection preprocessing, affected the runtime and accuracy of our positioning application. Our application could be modified for higher accuracy at the cost of increasing mapping time and vice versa.
 \section{Floor Mapping}
-We will now discuss the building environment and the methods we used to generate the FP database.
-\subsection{Environment}
-We mapped two floors of Halligan Hall, the Computer Science building at Tufts University. The floor plans were available to us, but the locations of the wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the median RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have a median RSS of -120 dB. 
+We now describe the building environment and discuss the methods used to generate the FP database.
+\subsection{Building Environment}
+We mapped two floors of Halligan Hall, the Computer Science and Electrical Engineering building at Tufts University. The average accessible area of each floor is 600m$^2$. The floor plans were available, but the locations of wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the average RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have an average RSS of -120 dB. 
  
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.5\textwidth]{APContour}
-    \caption{First Floor of Halligan Visible Unique MAC Addresses}
+    \caption{Visible unique MAC addresses in accessible areas on the first floor of Halligan}
 \end{figure}
 
 
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.5\textwidth]{dbContour}
-   \caption{Second Floor of Halligan Median RSS Contour Map}
+   \caption{Average RSS contour map in accessible areas on the second floor of Halligan}
 \end{figure}
 
-Figure 1 examines the MAC addresses visible on the first floor of Halligan, while Figure 2 examines the median RSS values on the second floor of Halligan.
+We performed the mapping of both visible MAC addresses and average RSS values on all floors. Figure 1 shows the MAC addresses visible on the first floor of Halligan, while Figure 2 shows the average RSS values on the second floor of Halligan.
 
 \subsection{Fingerprint Logging Methodology}
 
@@ -70,31 +68,30 @@ Figure 1 examines the MAC addresses visible on the first floor of Halligan, whil
   \centering
     \includegraphics[width=0.5\textwidth]{firstFloor.png}
     \includegraphics[width=0.5\textwidth]{secondFloor.png}
-     \caption{Mapped Positions in Halligan}
+     \caption{Mapped positions in Halligan on both floors}
 \end{figure}
 
-To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure 3. The positions in Figure 3 were determined manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions estimated with reference to the points in Figure 3.\\
-\indent In deciding the number of scans, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using E (discussed in section II.ii.A). Given the similarity of RSS values, we decided to focus on the remaining two factors: time and MAC coverage. \\
+To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure 3. The positions in Figure 3 were chosen manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions estimated with reference to the points in Figure 3.\\
+\indent In deciding the number of scans for each chosen location, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using $\sigma_E$ (equation 2 TODO). Given the similarity of RSS values independent of the number of scans per position, we focus on the remaining two factors: time and MAC coverage. \\
 
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.3}
-\caption{Floor Recording Times}
+\caption{Floor Recording Times (average 1.5 sec/scan)}
 \label{table_floor_times}
 \centering
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-Scans (1.5s/scan) & 2 & 10 & \textbf{30} & 60 & 100 \\
+Scans per Position & 2 & 10 & \textbf{30} & 60 & 100 \\
 \hline
-Time (Hours)               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12\\
+Scan Time per Floor (Hours)               & 0.24   & 1.2     & \textbf{3.5}     & 7.0      & 12\\
 \hline
 \end{tabular}
 }
 \end{table}
 
-\indent Increasing the number of scans improves results, but involves a time tradeoff, as scanning is the most time-consuming part of site survey. With regards to runtime, different WDs had dramatically different scan times, ranging from 0.20 to 2.0 seconds. Table 1 lists the approximate time to record a floor for each number of scans, assuming the worst-case scan time. The number of locations on each floor was based on the average number of locations facing one direction on the two floors of Halligan Hall.\\
-
+\indent Increasing the number of scans improves MAC coverage, but involves a time tradeoff, as scanning is the most time-consuming part of site survey. Different WDs had dramatically different scan times, ranging from 0.20 to 2.0 seconds per scan. Table 1 lists the approximate time to record a floor for each number of scans, assuming the worst-case scan time. The number of locations on each floor was based on the average number of locations facing only one direction.
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.3}
@@ -120,101 +117,100 @@ Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100
 }
 \end{table}
 
-\indent We chose a number of scans for site surveying which balanced sufficient RSS precision against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table 2, for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
-\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and the Samsung Galaxy Nexus(Wi-Fi: IEEE 802.11 a/b/g/n). The average distance between each phone's recording of the same physical location was 6.3 dB. This value is notably high compared to an average distance of 1.7 dB between four surveys made using the same phone. Though detrimental to our position finder's accuracy, the decision to map with multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
-\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [6]. We found an average distance of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with direction for applications requiring higher accuracy.\\
-\indent The set of FPs collected during mapping is used as data for our positioning algorithm. Upon receiving a positioning request containing FP A, the algorithm compares A with each FP in the mapped set, using the FPs most similar to A to estimate A's position on the map.
+\indent We chose a number of scans for site surveying which balanced MAC coverage against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table II (TODO: ref), for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
+\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and Samsung Galaxy Nexus (Wi-Fi: IEEE 802.11 a/b/g/n). Because of different phones' hardware and processing capabilities, the average difference between each phone's recording of the same physical location was 6.3 dB, using $\sigma_E$ (TODO: site equation 2). This value is notably high compared to an average difference of 1.7 dB between four surveys made using the same phone. Despite this inconsistency between devices, our application was able to provide acceptable levels of accuracy. This decision to use multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
+\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements [6]. We found an average difference of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with multiple directions for applications requiring higher accuracy.\\
+\indent The set of FPs collected during mapping is used as the database for our positioning algorithm. Upon receiving a positioning request containing FP $A$, the algorithm compares $A$ with each FP entry in the database, using the FP entries most similar to $A$ to estimate $A$'s position on the map.
 
 \section{Positioning Algorithms}
-Many classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [7][8]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improved our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
-\subsection{Weighted K-Nearest Neighbor}
-\indent Consider a set S of FPs  where N=[$n_1$, $n_2$, ..., $n_K$] is the set of K FPs from S nearest to some other point $\rho$ by distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\rho$ is calculated as:
+A number of classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map [7][8]. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improved our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
+\subsection{Weighted K-Nearest Neighbor Algorithm}
+\indent Consider a database $S$ of mapped FPs, in which $N=[n_1, n_2, ..., n_K]$ is the set of $K$ mapped FPs nearest to some recorded point $\rho$ measured by a distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\hat{\rho}$ of $\rho$ is calculated as:
 \begin{equation}
 \label{wknn}
-\hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}\rho'_i, \quad w_i = \sigma(n_i, \rho)^{-1}
+\hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}n'_i, \quad w_i = \sigma(n_i, \rho)^{-1}
 \end{equation}
-where $\omega_i$ is the weight of $n_i$, $\rho'_i$ is the position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method uses equal weights for all fingerprints in N. The specific distance metrics used in our implementation are discussed in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 [3]. 
+where $\omega_i$ is the weight assigned to $n_i$, $n'_i$ is the position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method is a special case of WKNN which uses equal weights for all mapped fingerprints in $N$. The specific distance metrics used in our implementation are discussed in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 [3]. 
 
 \subsection{Distance Metrics}
-WKNN is a very flexible classifier, and can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we used to quantify difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs A and B with RSS vectors a=[$a_1$, $a_2$, ... , $a_m$] and b=[$b_1$, $b_2$, ... , $b_n$], respectively. 
+WKNN is a very flexible classifier which can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we used to quantify the difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs $A$ and $B$ with RSS vectors $a=[a_1, a_2, ... , a_m]$ and $b=[b_1, b_2, ... , b_n]$, respectively. 
 
 \subsubsection{Euclidean Distance ($\sigma_E$)}
 
 \indent In the ideal case where the sets of MAC addresses seen by A and B are identical, the Euclidean distance between A and B is calculated as:
 \begin{equation}
 \label{euclidean_ideal}
-\sigma_{E_{ideal}}(A, B) = (\sum\limits_{i}|a_i - b_i|^2)^\frac{1}{2}
+\sigma_{E_{\text{ideal}}}(A, B) = (\sum\limits_{i}|a_i - b_i|^2)^\frac{1}{2}
 \end{equation}
-where the MAC address of $a_i$ corresponds to that of $b_i$. However, in a realistic environment, there will often be several MAC addresses seen by A and not by B, and vice-versa. One proposed means of handling these mismatches is to assign a threshold value equal to the lowest recorded RSS measurement in the FP database to missing RSS measurements [9]. By this definition, the Euclidean distance between A and B is calculated as:
+where the MAC address of $a_i$ corresponds to that of $b_i$. However, in a realistic environment, there will often be several MAC addresses seen by $A$ and not by $B$, and vice-versa. A proposed means of handling these mismatches is to assign a threshold value equal to the lowest recorded RSS measurement in the FP database to missing RSS measurements [9]. By this approach, the Euclidean distance between $A$ and $B$ is calculated as:
 \begin{equation}
 \label{euclidean}
 \resizebox{0.45\textwidth}{!}{$\sigma_{E}(A, B)=(\sum\limits_{i}|a_i-b_i|^2+\sum\limits_{j, b_j\notin b}|a_j-I_{min}|^2+\sum\limits_{k, a_j\notin a}|I_{min}-b_k|^2)^\frac{1}{2}$}
 \end{equation}
-where $I_{min}$ is the lowest recorded RSS measurement in the FP database. In most cases, this has the desired effect of increasing the distance between two locations with non-matching MAC addresses.
+where $I_{min}$ is the lowest recorded RSS measurement in the FP database. In most cases, this approach has the desired effect of increasing the distance between two locations with non-matching MAC addresses.
 
 \subsubsection{Penalty-Weighted Euclidean Distance ($\sigma_{E'}$)}
-\indent One potential issue with the aforementioned means of handling mismatches is that it may result in false matches, in the case where A sees a MAC address with a very low RSS value and B does not see that MAC address. To address this issue, we propose the penalty-weighted Euclidean distance, defined as follows:
+\indent The $\sigma_E$ distance metric can produce false matches in the case where $A$ sees a MAC address with a low RSS value and $B$ does not seen that MAC address at all. To address this issue, we propose a penalty-weighted Euclidean distance metric:
 \begin{equation} \label{eq1}
 \begin{split}
 \sigma_{E}(A, B) & = (\sum\limits_{i}|a_i-b_i|^2 \\
-			& +  \alpha*\sum\limits_{j, b_j\notin b}|a_j-I_{min}|^2 \\
-			& + \alpha*\sum\limits_{k, a_j\notin a}|I_{min}-b_k|^2)^\frac{1}{2}
+			& +  \alpha\times\sum\limits_{j, b_j\notin b}|a_j-I_{min}|^2 \\
+			& + \alpha\times\sum\limits_{k, a_j\notin a}|I_{min}-b_k|^2)^\frac{1}{2}
 \end{split}
 \end{equation}
-
-where $\alpha$ is a constant value. By introducing a new coefficient, we enable our algorithm to assign a different weight to mismatching MAC addresses.  Through iterative testing, we determined the best value of $\alpha$ to be 0.25. This allows for an increased distance for locations with non-matching MAC addresses but limits the effect of false RSS matches.
+where $\alpha$ is a constant value. By introducing this new coefficient, we enable our algorithm to assign a different weight to mismatching MAC addresses.  Through iterative testing, we determined the best value of $\alpha$ to be 0.25. This allows for an increased distance for locations with non-matching MAC addresses but limits the effect of false RSS matches.
 	
 \subsubsection{Inverse Jaccard Coefficient ($\sigma_{J^{-1}}$)}
-\indent The Jaccard coefficient is equal to the number of elements in the intersection divided by the number of elements in the union [10]. The larger the Jaccard coefficient, the greater the similarity between the two sets. We use the inverse Jaccard coefficient with our implementation of WKNN, as small values indicate similarity within the WKNN algorithm. The inverse Jaccard coefficient is calculated as:  
+\indent The Jaccard coefficient is equal to the number of elements in the intersection divided by the number of elements in the union [10]. The larger the Jaccard coefficient, the greater the similarity between the two sets. We use the inverse Jaccard coefficient with our implementation of WKNN, as smaller values indicate higher similarity within the WKNN algorithm. The inverse Jaccard coefficient is calculated as: 
 \begin{equation}
 \label{jaccard}
-\sigma_{J^{-1}}(A, B) = (\frac{|a\cap b|}{|a\cup b|})^{-1}
+\sigma_{J^{-1}}(A, B) = \left(\frac{|a\cap b|}{|a\cup b|}\right)^{-1}
 \end{equation}
-The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates similarity within the WKNN algorithm. As this only examines the MAC addresses, this is a quick yet coarse method to determine distances between locations.
+The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates high similarity within the WKNN algorithm. As this metric only examines the MAC addresses, it is a quick yet coarse method to determine distances between locations.
 
 \subsubsection{Linear Combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$)}
 \indent Since the penalty-weighted Euclidean distance metric and the inverse Jaccard coefficient both reveal valuable information about the difference between RSS vectors, we propose a new distance metric that is the linear combination of these two measures, defined as follows:
 \begin{equation}
 \label{combined}
-\sigma_{E'+J^{-1}}(A, B) = \beta_1*\sigma_{E'}(A, B)+\beta_2*\sigma_{J^{-1}}(A, B)
+\sigma_{E'+J^{-1}}(A, B) = \beta_1\times\sigma_{E'}(A, B)+\beta_2\times\sigma_{J^{-1}}(A, B)
 \end{equation}
 where $\beta_1$ and $\beta_2$ are constants. Through iterative testing, we determined the best values of $\beta_1$ and $\beta_2$ to be 1.0 and 0.45, respectively. This result utilizes the effectiveness of the penalty-weighted Euclidean distance metric at detecting differences in RSS values for common MAC addresses, as well as the ability of the inverse Jaccard metric to penalize unique MAC addresses.
 
 \section{Map-Aware Algorithm Refinement Techniques}
 
-In addition to the distance metrics used in our WKNN algorithm, we made several changes to our map structure and algorithm execution that improved the performance of our position finder. 
+In addition to the distance metrics used in the WKNN algorithm, we made several refinements to our algorithm that improved the performance of our position finder. 
 
-\subsection{Density-Penalizing Neighbor Weighting}
+\subsection{Floor Detection Pre-Processing}
+\indent Before running WKNN with a more complex distance metric, we first run it using only the inverse Jaccard coefficient in order to determine the floor of our test point. Calculating the inverse Jaccard coefficient between two sets of MAC addresses does not require RSS values, allowing for faster performance compared to calculating Euclidean distance. Once we have determined the floor of the positioning point, we find its coordinates by running WKNN with composite distance $\sigma_C$ (defined in the next subsection TODO), only iterating over FPs in the database on the identified floor. While this change does not yield significant time improvements given our test environment that only contains two floors, its benefits become more evident in an environment with a large number of floors and buildings.
+
+\subsection{Density-Penalizing Neighbor Weighting Factor}
 \indent We propose a novel neighbor-weighting factor to improve accuracy when locating positions in sparsely mapped buildings. This factor improved accuracy when locating points in corners and near the edges of the mapped areas. We define the neighbor factor $W_d$ for some point $d$, as:
 \begin{equation}
 \label{density}
 \begin{split}
-W_d=\phi*\sum\limits_{i}F(d,di)\\
+W_d=\phi\times\sum\limits_{i}F(d,di)\\
 F(d,di)=\{\begin{array}{lr}
        1: &  \sigma_E(d, d_i) < \Gamma \\
-       0: &  otherwise
+       0: &  \text{otherwise}
 \end{array}
 \end{split}
 \end{equation}
-where $\phi$ is a constant, $d_i$ is the $i^{th}$ fingerprint in the database, and $\Gamma$ is the neighbor threshold. Through iterative testing, we determined the optimal value of $\phi$ to be 0.08 and $\Gamma$ to be 20 meters. The minimum neighbor count is always one, as a point is always its own neighbor; this ensures a non-zero value in all cases. This factor increases the importance of points with low neighbor counts, helping improve accuracy in areas that are sparsely mapped. 
-
-\subsubsection*{Floor Detection Pre-Processing}
-\indent Before running WKNN with a more complex distance metric, we first run it using only the inverse Jaccard coefficient in order to determine the floor of our test point. We do this because calculating the inverse Jaccard coefficient between two sets of MAC addresses does not require any calculations involving signal strength, so it does not take as much computational time as calculating Euclidean distance. Once we have determined the floor of our test point, we find its coordinates by running WKNN with distance $\sigma_C$ (defined in the next section), only iterating over fingerprints in the database on the correct floor. While this change does not yield significant time improvements given our test environment that only contains two floors, its benefits become more evident in an environment with several floors and buildings.
+where $\phi$ is a constant, $d_i$ is the $i^{th}$ fingerprint in the database, and $\Gamma$ is the neighbor distance threshold. Through iterative testing, we determined the optimal value of $\phi$ to be 0.08 and $\Gamma$ to be 20 meters. The minimum neighbor count is always one, as a point is always its own neighbor; this ensures a non-zero value in all cases. This factor increases the importance of points with low neighbor counts, helping improve accuracy in areas that are sparsely mapped. 
 
 \subsection{Composite Distance Metric $\sigma_C$}
-\indent Our WKNN measures distance as a linear combination of Euclidean distance with penalty, $\sigma_{E'}$,  the inverse Jaccard distance $\sigma_{J^{-1}}$, and the neighbor count weighting, $W$,  given as follows:
+\indent Our WKNN measures distance as a linear combination of the Euclidean distance with penalty, $\sigma_{E'}$,  the inverse Jaccard distance $\sigma_{J^{-1}}$, and the neighbor count weighting, $W$,  given as follows:
 \begin{equation}
 \label{composite}
-\sigma_C(A, B)=\beta_1*\sigma_{E'}(A, B)+\beta_2*\sigma_{J^{-1}}(A, B)+W_B
+\sigma_C(A, B)=\beta_1\times\sigma_{E'}(A, B)+\beta_2\times\sigma_{J^{-1}}(A, B)+W_B
 \end{equation}
-where $\beta_1$ and $\beta_2$ are constants. This metric allows for a combination of comparing the similarity of signal strengths through the penalty-weighted Euclidean distance, comparing the similarity of seen MAC addresses through the inverse Jaccard coefficient, and an additional weighting with the neighbor factor. This composite distance metric is evaluated in the next section and compared to each of the component distant metrics.
+where $\beta_1$ and $\beta_2$ are constants, chosen as in (6 TODO). This metric allows for a combination of comparing the similarity of signal strengths through the penalty-weighted Euclidean distance, comparing the similarity of seen MAC addresses through the inverse Jaccard coefficient, and an additional weighting with the neighbor factor. This composite distance metric is evaluated in the next section and compared to each of the component distant metrics.
 
-\section{Performance}
+\section{Performance Evaluation}
 
-Through empirical evaluation, we determined that our positioning application has an average error of 2.66m, meeting the requirements of most commercial applications. We break our analysis into three sections. First, we discuss our testing methodology. Second, we compare our four distance metrics: Euclidean distance ( $\sigma$), penalty-weighted Euclidean distance ( $\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of$\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). Finally, we analyze our map-aware algorithm refinements: Floor Detection Preprocessing and Density-Penalizing Neighbor Weighting.
+Through empirical evaluation, we determined that our positioning application has an average error of 2.66m, meeting the requirements of most commercial applications. We break our results and analysis into three sections. First, we discuss our testing methodology. Second, we compare the four discussed distance metrics: Euclidean distance ($\sigma$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). Finally, we analyze our map-aware algorithm refinements: Floor Detection Preprocessing and Density-Penalizing Neighbor Weighting.
 
 \subsection{Testing Methodology}
-We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm, which efficiently creates a Poisson Distribution of points within the mapped regions [11] displayed in Figure 4. All FPs in the testing set were recorded using the HTC One m7. 
+We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm [11], which efficiently creates a Poisson Distribution of points within the mapped regions, as displayed in Figure 4 (TODO). All FPs in the testing set were recorded using the HTC One m7. 
 
 \begin{figure}[H]
   \centering
@@ -222,16 +218,16 @@ We recorded a set of points for the purpose of fine-tuning our coefficients, cal
    \caption{Test points on Halligan Floor 1 (left) and Floor 2 (right); red boxes indicate accessible regions, and green dots indicate test points}
 \end{figure}
 
-The accuracy of our positioning algorithm is dependent on the number of scans the WD makes, as shown in Figure 5. Increasing the number of scans beyond five does not significantly improve the performance of our algorithm; therefore, we chose to test our positioning application against FPs gathered with five scans.
+The accuracy of our positioning algorithm is dependent on the number of scans the WD makes for each test point, as shown in Figure 5 (TODO). Increasing the number of scans beyond five does not significantly improve the performance of our algorithm; therefore, we chose to test our positioning application against FPs gathered with five scans.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.5\textwidth]{pull_errors.png}
-   \caption{Accuracy of composite distance metric for various numbers of positioning scans}
+   \caption{Accuracy of the composite distance metric for various numbers of positioning scans}
 \end{figure}
 
 \subsection{Distance Metric Comparisons}
-Figure 6 shows the observed accuracy of our WKNN algorithm using four different distance metrics. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-Weighted Euclidean Distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the error to 2.78m. However, the linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric.
+Figure 6 (TODO) shows the observed accuracy of our WKNN algorithm using the four distance metrics discussed in section (TODO). As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-weighted Euclidean distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the average error to 2.78m. However, this linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric alone. The composite distance metric is discussed in the next section.
 
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.3}
@@ -241,7 +237,7 @@ Figure 6 shows the observed accuracy of our WKNN algorithm using four different 
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{|c|c|c|}
 \hline
-\bfseries Distance Metric & Mean Error($m$) & Standard Deviation($m^{2}$) \\
+\bfseries Distance Metric & Average Error ($m$) & Standard Deviation ($m$) \\
 \hline
 Inverse Jaccard Coefficient & 4.75  & 3.49\\
 \hline
@@ -260,21 +256,20 @@ Composite Distance Metric& 2.66   & 1.44\\
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.5\textwidth]{distance_comparison.png}
-    \caption{CDF of positioning accuracy for various WKNN distance metrics (K=3)}
+    \caption{Cumulative distribution of positioning accuracy for various WKNN distance metrics (K=3)}
 \end{figure}
 
 
 \subsection{Map-Aware Algorithm Refinement}
 
-We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$). The observed accuracy of this metric can be seen in Figure 6. Overall, neighbor weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, neighbor weighting increases the average error by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error. \\
-\indent Our composite distance metric performs significantly better than the standard Euclidean distance metric, with a p-value of 0.018. We arrived at this value using a two-tailed two-sample t-test with a confidence level of 0.95.  \\		
-\indent Figure 7 shows the effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors.This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required.
+We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$) in (eq8 TODO). The observed accuracy of this metric can be seen in Figure 6. Overall, neighbor weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, neighbor weighting increases the average error slightly, by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error. \\	
+\indent Figure 7 (TODO) shows the estimated effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified.
 
 
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.5\textwidth]{time_comparison.png}
-   \caption{Effect of floor detection preprocessing technique on positioning time}
+   \caption{Estimated effect of floor detection preprocessing technique on positioning time}
 \end{figure}
 
 This performance improvement would be extremely significant in a large-scale commercial application.
