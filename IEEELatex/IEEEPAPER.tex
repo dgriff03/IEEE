@@ -19,6 +19,9 @@
 \IEEEauthorblockA{Tufts University}
 \and
 \IEEEauthorblockN{Tyler Lubeck}
+\IEEEauthorblockA{Tufts University}
+\and
+\IEEEauthorblockN{Mai Vu, PhD}
 \IEEEauthorblockA{Tufts University}}
 
 \maketitle
@@ -275,19 +278,16 @@ We add our Density-Penalizing Neighbor Weighting technique as a parameter to our
 This performance improvement would be extremely significant in a large-scale commercial application.
 
 \section{Discussion}
-\indent Our positioning application has runtime and accuracy similar to other fingerprint-based systems [2]. Although there are fingerprinting positioning systems with higher accuracy, many utilize application-specific hardware, whereas our application operates with  consumer hardware and no assumed site information.\\
-\indent One specific example is the Microsoft RADAR system, which utilizes a basic KNN algorithm with RF signals. Although several systems have come out since RADAR that are improvements, the system achieved similar average error distances, 3 - 5 meters, while operating on a single, highly arranged floor, with the three base stations placed by the developing team, and a single set of hardware utilized. Our system demonstrates that this level of accuracy can be realized with consumer hardware in a commercial-like setting. Similar to how RADAR was able to utilize techniques such as continual user tracking, as well as multiple radio maps for different environments such as time of day [12], we believe our implementation could be improved with these methods while still utilizing a device agnostic system.\\
-\indent A system proposed in 2013 uses improved double-peak Gaussian distributions and a probabilistic approach to determine position. This approach used a single device for mapping, and reports an average error of 1.5 meters [13]. While this is a significantly higher accuracy, the techniques used could be incorporated into our positioning application to achieve a similar accuracy.\\ 
-\indent Beyond increasing scan numbers, several other methods and data could be incorporated to further improve our system accuracy, including direction in site-survey, WD inertia, and prior knowledge of the site. These options are left as future work.
-
-
+\indent Our positioning application has runtime and accuracy comparable to other fingerprint-based systems [2]. Although there are fingerprinting positioning systems with higher accuracy, these often utilize application-specific hardware, whereas our application operates with consumer hardware and assumes no prior site information.\\
+\indent Microsoft RADAR [4] is an example of a system using KNN that achieved an average error of 3-5 meters using RF signals. This system was implemented using one mapping device on a single floor that had three pre-arranged base stations. Our system achieves similar accuracy with consumer hardware in a commercial-like setting. Subsequent iterations of RADAR incorporated continual user-tracking and multiple RSS maps for different environments, such as time of day [12]. The same improvements could be applied to our system.\\
+\indent Another system, proposed in 2013, uses improved double-peak Gaussian distributions and a probabilistic approach to determine position [13]. This approach used a single device for mapping, and reported an average error of 1.5m. While this is a notably higher accuracy, the statistical analysis techniques used could be incorporated into our positioning application to improve accuracy.\\ 
+\indent Beyond increasing scan numbers, several other methods and additional data could be incorporated to further improve our system accuracy, including multiple directions in site-survey, WD inertia, and prior knowledge of the site. These options are left as future work.
 
 \section{Conclusion}
-Our positioning system addressing many of the obstacles to widespread indoor positioning system implementation. The positioning system we implement is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average error of 2.66m, satisfying the requirements of most applications. We propose two metrics for use with the WKNN algorithm: Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm modification for improved scalability, Floor Detection Preprocessing. Future work could integrate other algorithm improvement techniques, such as Double Gaussian Distribution processing, and could investigate the performance of user-feedback in the mapping process.
-
+Our positioning system addresses many of the obstacles to widespread indoor positioning system implementation. We propose two novel metrics for use with the WKNN algorithm: Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm refinement for improved scalability: Floor Detection Preprocessing. Further improvement can be obtained by integrating other algorithm refinement techniques, such as Double Gaussian Distribution processing and the inclusion of user-feedback in the mapping process. The positioning system we implemented is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average accuracy of 2.66m, satisfying the requirements of most applications.
 
 \section*{Acknowledgment}
-We would like to thank our research advisor Professor Mai Vu of the Tufts University Electrical Engineering and Computer Science department for providing invaluable guidance and feedback. We would also like to thank Professor Chris Gregg of Tufts University for his advice and encouragement.
+We would like to thank Professor Chris Gregg of Tufts University for his advice and encouragement.
 
 
 %----------------------------------------------------------------------------------------

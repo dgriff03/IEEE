@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  27 APR 2015 17:46
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  27 APR 2015 18:39
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -320,12 +320,12 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for U+msa on input line 27.
+LaTeX Font Info:    Try loading font information for U+msa on input line 30.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 27.
+LaTeX Font Info:    Try loading font information for U+msb on input line 30.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -336,20 +336,20 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <APContour.png, id=10, 400.49625pt x 194.7275pt>
 File: APContour.png Graphic file (type png)
  <use APContour.png>
-Package pdftex.def Info: APContour.png used on input line 52.
+Package pdftex.def Info: APContour.png used on input line 55.
 (pdftex.def)             Requested size: 258.0pt x 125.45117pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 52--53
+Overfull \hbox (6.0pt too wide) in paragraph at lines 55--56
  [][] 
  []
 
 <dbContour.png, id=12, 389.455pt x 202.7575pt>
 File: dbContour.png Graphic file (type png)
  <use dbContour.png>
-Package pdftex.def Info: dbContour.png used on input line 59.
+Package pdftex.def Info: dbContour.png used on input line 62.
 (pdftex.def)             Requested size: 258.0pt x 134.32465pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 59--60
+Overfull \hbox (6.0pt too wide) in paragraph at lines 62--63
  [][] 
  []
 
@@ -359,21 +359,21 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <firstFloor.png, id=13, 803.0pt x 501.875pt>
 File: firstFloor.png Graphic file (type png)
  <use firstFloor.png>
-Package pdftex.def Info: firstFloor.png used on input line 69.
+Package pdftex.def Info: firstFloor.png used on input line 72.
 (pdftex.def)             Requested size: 258.0pt x 161.2542pt.
 
 <secondFloor.png, id=14, 803.0pt x 501.875pt>
 File: secondFloor.png Graphic file (type png)
  <use secondFloor.png>
-Package pdftex.def Info: secondFloor.png used on input line 70.
+Package pdftex.def Info: secondFloor.png used on input line 73.
 (pdftex.def)             Requested size: 258.0pt x 161.2542pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 69--71
+Overfull \hbox (6.0pt too wide) in paragraph at lines 72--74
  [][] 
  []
 
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 69--71
+Overfull \hbox (6.0pt too wide) in paragraph at lines 72--74
  [] 
  []
 
@@ -381,7 +381,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 69--71
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--76
+Underfull \hbox (badness 10000) in paragraph at lines 77--79
 
  []
 
@@ -393,20 +393,20 @@ Underfull \vbox (badness 1107) has occurred while \output is active []
 [4] <testpoints.png, id=37, 573.14125pt x 207.77625pt>
 File: testpoints.png Graphic file (type png)
  <use testpoints.png>
-Package pdftex.def Info: testpoints.png used on input line 217.
+Package pdftex.def Info: testpoints.png used on input line 220.
 (pdftex.def)             Requested size: 258.0pt x 93.53014pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 217--218
+Overfull \hbox (6.0pt too wide) in paragraph at lines 220--221
  [][] 
  []
 
 <pull_errors.png, id=38, 578.16pt x 433.62pt>
 File: pull_errors.png Graphic file (type png)
  <use pull_errors.png>
-Package pdftex.def Info: pull_errors.png used on input line 225.
+Package pdftex.def Info: pull_errors.png used on input line 228.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 225--226
+Overfull \hbox (6.0pt too wide) in paragraph at lines 228--229
  [][] 
  []
 
@@ -418,10 +418,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: distance_comparison.png Graphic file (type png)
 
 <use distance_comparison.png>
-Package pdftex.def Info: distance_comparison.png used on input line 258.
+Package pdftex.def Info: distance_comparison.png used on input line 261.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 258--259
+Overfull \hbox (6.0pt too wide) in paragraph at lines 261--262
  [][] 
  []
 
@@ -432,17 +432,14 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <time_comparison.png, id=47, 578.16pt x 433.62pt>
 File: time_comparison.png Graphic file (type png)
  <use time_comparison.png>
-Package pdftex.def Info: time_comparison.png used on input line 272.
+Package pdftex.def Info: time_comparison.png used on input line 274.
 (pdftex.def)             Requested size: 258.0pt x 193.49953pt.
 
-Overfull \hbox (6.0pt too wide) in paragraph at lines 272--273
+Overfull \hbox (6.0pt too wide) in paragraph at lines 274--275
  [][] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 <./distance_comparison.png> <./time_comparison.png>]
+[6 <./distance_comparison.png> <./time_comparison.png>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -483,7 +480,7 @@ e/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/
 -dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/fon
 ts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/u
 rw/times/utmri8a.pfb>
-Output written on IEEEPAPER.pdf (7 pages, 994053 bytes).
+Output written on IEEEPAPER.pdf (7 pages, 993893 bytes).
 PDF statistics:
  112 PDF objects out of 1000 (max. 8388607)
  71 compressed objects within 1 object stream
