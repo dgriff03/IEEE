@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  28 APR 2015 16:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  28 APR 2015 17:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -244,14 +244,6 @@ Package: amsthm 2004/08/06 v2.20
 \dth@everypar=\toks28
 )
 (./IEEEPAPER.aux)
-Runaway argument?
-{\contents 
-./IEEEPAPER.tex:8: File ended while scanning use of \@writefile.
-<inserted text> 
-                \par 
-l.8 \begin{document}
-                    
-? 
 \openout1 = `IEEEPAPER.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -266,6 +258,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
+
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count110
@@ -336,29 +329,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 30.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: Citation `Lakmali' on page 1 undefined on input line 37.
-
-
-LaTeX Warning: Citation `Liu' on page 1 undefined on input line 37.
-
-
-LaTeX Warning: Citation `Kokkinis' on page 1 undefined on input line 38.
-
-
-LaTeX Warning: Citation `Chaudhuri' on page 1 undefined on input line 38.
-
-
-LaTeX Warning: Citation `Bahl' on page 1 undefined on input line 39.
-
-
-LaTeX Warning: Citation `Kokkinis' on page 1 undefined on input line 39.
-
-
-LaTeX Warning: Citation `Fielding' on page 1 undefined on input line 46.
-
-[1{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+) [1{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
@@ -400,26 +371,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--84
 
 LaTeX Warning: Citation `Sayad' on page 2 undefined on input line 108.
 
-[2 <./APContour.png> <./dbContour.png> <./floorImage.png>]
-
-LaTeX Warning: Citation `Sayad2' on page 3 undefined on input line 136.
-
-
-LaTeX Warning: Citation `Chaudhuri' on page 3 undefined on input line 136.
-
-
-LaTeX Warning: Citation `Kokkinis' on page 3 undefined on input line 143.
-
-
-LaTeX Warning: Citation `Kemppi' on page 3 undefined on input line 155.
-
-[3]
-
-LaTeX Warning: Citation `Dunbar' on page 4 undefined on input line 174.
-
-
-LaTeX Warning: Citation `Machaj' on page 4 undefined on input line 223.
-
+[2 <./APContour.png> <./dbContour.png> <./floorImage.png>] [3]
 <testpoints.png, id=34, 573.14125pt x 207.77625pt>
 File: testpoints.png Graphic file (type png)
  <use testpoints.png>
@@ -440,10 +392,6 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 236--237
  [][] 
  []
 
-
-LaTeX Warning: Reference `fig:cdf_positioning_accuracy' on page 5 undefined on 
-input line 242.
-
 <distance_comparison.png, id=39, 578.16pt x 433.62pt>
 File: distance_comparison.png Graphic file (type png)
 
@@ -455,18 +403,6 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 270--271
  [][] 
  []
 
-
-LaTeX Warning: Reference `fig:cdf_positioning_accuracy' on page 5 undefined on 
-input line 278.
-
-
-LaTeX Warning: Reference `tab:table_distance_metric_accuracy' on page 5 undefin
-ed on input line 278.
-
-
-LaTeX Warning: Reference `fig:floor_preprocessing_effect' on page 5 undefined o
-n input line 279.
-
 <time_comparison.png, id=40, 578.16pt x 433.62pt>
 File: time_comparison.png Graphic file (type png)
  <use time_comparison.png>
@@ -476,18 +412,6 @@ Package pdftex.def Info: time_comparison.png used on input line 284.
 Overfull \hbox (6.0pt too wide) in paragraph at lines 284--285
  [][] 
  []
-
-
-LaTeX Warning: Citation `Liu' on page 5 undefined on input line 290.
-
-
-LaTeX Warning: Citation `Bahl' on page 5 undefined on input line 291.
-
-
-LaTeX Warning: Citation `Bahl2' on page 5 undefined on input line 291.
-
-
-LaTeX Warning: Citation `Chen' on page 5 undefined on input line 292.
 
 
 Underfull \vbox (badness 5652) has occurred while \output is active []
@@ -508,15 +432,12 @@ Before submitting the final camera ready copy, remember to:
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 3832 strings out of 493117
- 57825 string characters out of 6135433
- 132432 words of memory out of 5000000
- 7225 multiletter control sequences out of 15000+600000
+ 3831 strings out of 493117
+ 57817 string characters out of 6135433
+ 132501 words of memory out of 5000000
+ 7224 multiletter control sequences out of 15000+600000
  45503 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,22n,26p,1034b,254s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -538,7 +459,7 @@ ts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/u
 rw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/
 utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.pf
 b>
-Output written on IEEEPAPER.pdf (6 pages, 758347 bytes).
+Output written on IEEEPAPER.pdf (6 pages, 757991 bytes).
 PDF statistics:
  107 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream
