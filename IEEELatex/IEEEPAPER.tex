@@ -69,10 +69,17 @@ We performed the mapping of both visible MAC addresses and average RSS values on
 
 \begin{figure}[h!] 
   \centering
-    \includegraphics[width=0.5\textwidth]{firstFloor.png}
-    \includegraphics[width=0.5\textwidth]{secondFloor.png}
+    \includegraphics[width=0.5\textwidth]{floorImage.png}
      \caption{Mapped positions in Halligan on both floors}
 \end{figure}
+
+
+%\begin{figure}[h!] 
+ % \centering
+  %  \includegraphics[width=0.5\textwidth]{firstFloor.png}
+%    \includegraphics[width=0.5\textwidth]{secondFloor.png}
+  %   \caption{Mapped positions in Halligan on both floors}
+%\end{figure}
 
 To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure 3. The positions in Figure 3 were chosen manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions estimated with reference to the points in Figure 3.\\
 \indent In deciding the number of scans for each chosen location, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using $\sigma_E$ (equation 2 TODO). Given the similarity of RSS values independent of the number of scans per position, we focus on the remaining two factors: time and MAC coverage. \\
