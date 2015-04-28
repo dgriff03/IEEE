@@ -27,7 +27,7 @@
 \maketitle
 
 \begin{abstract}
-There is a growing need to position wireless devices in the real world for applications such as navigation, emergency location services, and contextual advertisements. Though GPS and the cellular network provide viable outdoor accuracy, these approaches are unsuited for indoor positioning. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system can be implemented in any Wi-Fi-enabled environment without modifying the site. We propose several optimized distance metrics as well as two novel environment-based methods, a density penalty factor and a floor preprocessing technique, to improve the accuracy of the Weighted K-Nearest Neighbor algorithm. Our implementation requires only thirteen minutes of site-survey time per 100m$^2$ and has an average positioning accuracy of 2.66m, which is sufficient for the applications discussed in this paper.
+There is a growing need to position wireless devices in the real world for applications such as navigation, emergency location services, and contextual advertisements. Though GPS and the cellular network provide viable outdoor accuracy, these approaches are unsuited for indoor positioning because of non-Line of Sight environment. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system can be implemented in any Wi-Fi-enabled environment without modifying the site. We propose several optimized distance metrics as well as two novel environment-based methods, a density penalty factor and a floor preprocessing technique, to improve the accuracy of the Weighted K-Nearest Neighbor algorithm. Our implementation requires only thirteen minutes of site-survey time per 100 m$^2$ and has an average positioning accuracy of 2.66 m, which is sufficient for most practical applications.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -35,13 +35,13 @@ There is a growing need to position wireless devices in the real world for appli
 \section{Introduction}
 As the number of wireless computing devices grows, there is a corresponding need to integrate these devices with the physical world to provide contextually relevant services. The device's position can be particularly valuable to a consumer or business. A consumer could locate a friend within a building; a business could provide location-dependent advertisements.\\
 \indent Global Navigation Satellite Systems (GNSS), such as GPS, achieve acceptable accuracy outdoors, but perform poorly indoors, under No-Line of Sight (No-LoS) conditions  \cite{Lakmali}. GNSS relies on LoS conditions to determine the position of a wireless device through triangulation or trilateration. The lack of LoS conditions indoors poses a serious challenge to these methods, requiring specialized hardware to achieve acceptable accuracy \cite{Liu}. \\
-\indent Most indoor positioning systems use Wi-Fi networks, as they are widely available and supported by most consumer hardware. This availability makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model \cite{Kokkinis}, and manual site-survey \cite{Chaudhuri}. Site-simulation allows for rapid site integration but requires prior knowledge of the location of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site. \\
-\indent Several indoor positioning systems have been successfully implemented. The RADAR positioning system \cite{Bahl} utilizes fingerprinting, achieving an average accuracy of 3-5m within a controlled environment. Another method, based on site-simulation, achieves an average accuracy of 1.46m by incorporating additional building information \cite{Kokkinis}. While these systems were successful, they were implemented in highly-controlled environments using site information that is not commonly available in commercial settings.\\
+\indent Most indoor positioning systems rely on Wi-Fi networks, as they are widely available and supported by most consumer hardware. This availability makes Wi-Fi networks the lowest cost option for positioning, since the required infrastructure already exists. When using Wi-Fi for positioning, there are two viable approaches: site-simulation using a signal-propagation model \cite{Kokkinis}, and manual site-survey \cite{Chaudhuri}. Site-simulation allows for rapid site integration but requires prior knowledge of the location of wireless access points (WAPs). Conversely, site-survey makes no assumptions about the environment but requires more time to integrate each site. \\
+\indent Several indoor positioning systems have been successfully implemented. The RADAR positioning system utilizes fingerprinting, achieving an average accuracy of 3 m to 5 m within a controlled environment \cite{Bahl}. Another method, based on site-simulation, achieves an average accuracy of 1.46 m by incorporating additional building information \cite{Kokkinis}. While these systems were successful, they were implemented in highly-controlled environments using site information that is not commonly available in commercial settings.\\
 \indent We design and implement an indoor positioning system using Wi-Fi signals based on the site-survey method for use within a fixed commercial environment. Our system uses the nearest neighbor algorithm to estimate the position of smart phone devices. We further propose several novel distance metrics, as well as two environment-based algorithm augmentations to improve accuracy. Our system requires a low site-survey time and achieves a competitive level of accuracy, even though it is implemented using consumer hardware.\\
 \indent This paper is organized as follows: we first state the aims of our work, followed by a discussion of how Fingerprints (FP) are recorded and how the FP database is created. We then discuss our positioning algorithm, describing the distance metrics and algorithm refinements, before presenting the performance of our implementation and comparing it against other systems. Finally, we discuss areas for future work.
 
 \section{Indoor Positioning System}
-The basic requirements for this indoor positioning system are to provide room-level precision, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be useable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
+The basic requirements for this indoor positioning system are to provide room-level precision, widespread coverage, and real-time feedback. An indoor positioning system for use in commercial settings must additionally be usable on a variety of devices, serve multiple users simultaneously, and scale with a large user base. Further, the system must function without extensive knowledge of or modifications to the site, and must be cheap to implement. \\
 \indent We design and implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. Our approach uses Received Signal Strength (RSS) measurements from a Wi-Fi network to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a Fingerprint (FP) map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
 \indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients \cite{Fielding}. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
 \indent We provide quantitative analyses of how different decisions, such as the number of scans and floor-detection preprocessing, affected the runtime and accuracy of our positioning application. Our application could be modified for higher accuracy at the cost of increasing mapping time and vice versa.
@@ -49,7 +49,7 @@ The basic requirements for this indoor positioning system are to provide room-le
 \begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{APContour}
-    \caption{Visible unique MAC addresses in accessible areas on the first floor of Halligan}
+    \caption{Visible unique MAC addresses in accessible areas on the first floor of Halligan Hall}
     \label{fig:visible_unique_macs}
 \end{figure}
 
@@ -57,14 +57,14 @@ The basic requirements for this indoor positioning system are to provide room-le
 \begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{dbContour}
-   \caption{Average RSS contour map in accessible areas on the second floor of Halligan}
+   \caption{Average RSS contour map in accessible areas on the second floor of Halligan Hall}
    \label{fig:rss_contour_map}
 \end{figure}
 
 \section{Floor Mapping}
 We now describe the building environment and discuss the methods used to generate the FP database.
 \subsection{Building Environment}
-We mapped two floors of Halligan Hall, the Computer Science and Electrical Engineering building at Tufts University. The average accessible area of each floor is 600m$^2$. The floor plans were available, but the locations of wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the average RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have an average RSS of -120 dB. 
+We mapped two floors of Halligan Hall, the Computer Science and Electrical Engineering building at Tufts University. The average accessible area of each floor is 600 m$^2$. The floor plans were available, but the locations of wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the average RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have an average RSS of -120 dB. 
  
 
 We performed the mapping of both visible MAC addresses and average RSS values on all floors. Figure \ref{fig:visible_unique_macs} shows the MAC addresses visible on the first floor of Halligan, while Figure \ref{fig:rss_contour_map} shows the average RSS values on the second floor of Halligan.
@@ -74,20 +74,13 @@ We performed the mapping of both visible MAC addresses and average RSS values on
 \begin{figure}[t!] 
   \centering
     \includegraphics[width=0.5\textwidth]{floorImage.png}
-     \caption{Mapped positions in Halligan on both floors}
+     \caption{Mapped locations in Halligan Hall on both floors}
      \label{fig:mapped_positions}
 \end{figure}
 
 
-%\begin{figure}[h!] 
- % \centering
-  %  \includegraphics[width=0.5\textwidth]{firstFloor.png}
-%    \includegraphics[width=0.5\textwidth]{secondFloor.png}
-  %   \caption{Mapped positions in Halligan on both floors}
-%\end{figure}
-
-To build the FP database, the average of thirty RSS scans is logged for each position, indicated in Figure \ref{fig:mapped_positions}. The positions in Figure \ref{fig:mapped_positions} were chosen manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at positions estimated with reference to the points in Figure \ref{fig:mapped_positions}.\\
-\indent In deciding the number of scans for each chosen location, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using $\sigma_E$ (Equation \ref{eq:euclidean_ideal}). Given the similarity of RSS values independent of the number of scans per position, we focus on the remaining two factors: time and MAC coverage. \\
+To build the FP database, the average of thirty RSS scans is logged for each mapped location, indicated in Figure \ref{fig:mapped_positions}. These locations were chosen manually through an examination of the floor plans and knowledge of the facility's accessibility. Each recording was stored as four values: a MAC address, an average RSS value, a standard deviation, and an association with a location on a map. The recordings were taken at locations estimated with reference to the points in Figure \ref{fig:mapped_positions}.\\
+\indent In deciding the number of scans for each chosen location, we considered three factors: time, RSS precision, and MAC address coverage. We tested a sample of scan values between one and one hundred using a single WD. The average Euclidean distance between each of the scans was under 1 dB when using $\sigma_E$ (Equation \ref{eq:euclidean_ideal}). Given the similarity of RSS values independent of the number of scans per location, we focus on the remaining two factors: time and MAC coverage. \\
 
 
 \begin{table}[!t]
@@ -111,8 +104,8 @@ Scan Time per Floor (Hours)               & 0.24   & 1.2     & \textbf{3.5}     
 
 
 \indent We chose a number of scans for site surveying which balanced MAC coverage against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table \ref{tab:MAC_accuracy}, for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
-\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and Samsung Galaxy Nexus (Wi-Fi: IEEE 802.11 a/b/g/n). Because of different phones' hardware and processing capabilities, the average difference between each phone's recording of the same physical location was 6.3 dB, using $\sigma_E$ (Equation \ref{eq:euclidean}). This value is notably high compared to an average difference of 1.7 dB between four surveys made using the same phone. Despite this inconsistency between devices, our application was able to provide acceptable levels of accuracy. This decision to use multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
-\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements \cite{Sayad}. We found an average difference of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with multiple directions for applications requiring higher accuracy.\\
+\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and Samsung Galaxy Nexus (Wi-Fi: IEEE 802.11 a/b/g/n). Because of different phones' hardware and processing capabilities, the average difference between each phone's recording of the same physical location was 6.3 dB, using $\sigma_E$ (Equation \ref{eq:euclidean}). This value is notably high compared to an average difference of 1.7 dB between four surveys made using the same phone. Despite this inconsistency among devices, our final application provides acceptable levels of accuracy. This decision to use multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
+\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements \cite{Sayad}. We found an average difference of 4.0 dB between four surveys made with the same WD in the same location, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with multiple directions for applications requiring higher accuracy.\\
 \indent The set of FPs collected during mapping is used as the database for our positioning algorithm. Upon receiving a positioning request containing FP $A$, the algorithm compares $A$ with each FP entry in the database, using the FP entries most similar to $A$ to estimate $A$'s position on the map.
 
 \begin{table}[!t]
@@ -183,7 +176,7 @@ where $\alpha$ is a constant value. By introducing this new coefficient, we enab
 \label{eq:jaccard}
 \sigma_{J^{-1}}(A, B) = \left(\frac{|a\cap b|}{|a\cup b|}\right)^{-1}
 \end{equation}
-The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates high similarity within the WKNN algorithm. As this metric only examines the MAC addresses, it is a quick yet coarse method to determine distances between locations.
+where $a$ and $b$ here represent the set of seen MAC addresses instead of average RSS values. The inverse Jaccard coefficient is small when the MAC addresses have high overlap, which indicates high similarity within the WKNN algorithm. As this metric only examines the MAC addresses, it is a quick yet coarse method to determine distances between locations.
 
 \subsubsection{Linear Combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$)}
 \indent Since the penalty-weighted Euclidean distance metric and the inverse Jaccard coefficient both reveal valuable information about the difference between RSS vectors, we propose a new distance metric that is the linear combination of these two measures, defined as follows:
@@ -201,7 +194,7 @@ In addition to the distance metrics used in the WKNN algorithm, we made several 
 \indent Before running WKNN with a more complex distance metric, we first run it using only the inverse Jaccard coefficient in order to determine the floor of our test point. Calculating the inverse Jaccard coefficient between two sets of MAC addresses does not require RSS values, allowing for faster performance compared to calculating Euclidean distance. Once we have determined the floor of the positioning point, we find its coordinates by running WKNN with composite distance $\sigma_C$ (defined in section \ref{subsec:density_penalizing_neighbor_weighting}), only iterating over FPs in the database on the identified floor. While this change does not yield significant time improvements given our test environment that only contains two floors, its benefits become more evident in an environment with a large number of floors and buildings.
 
 \subsection{Density-Penalizing Neighbor Weighting Factor}\label{subsec:density_penalizing_neighbor_weighting}
-\indent We propose a novel neighbor-weighting factor to improve accuracy when locating positions in sparsely mapped buildings. This factor improved accuracy when locating points in corners and near the edges of the mapped areas. We define the neighbor factor $W_d$ for some point $d$, as:
+\indent We propose a novel neighbor-weighting factor to improve accuracy when locating positions in sparsely mapped areas. This factor improved accuracy when locating points in corners and near the edges of the mapped areas. We define the neighbor factor $W_d$ for some point $d$, as:
 \begin{equation}
 \label{eq:density}
 \begin{split}
@@ -215,7 +208,7 @@ F(d,di)=\{\begin{array}{lr}
 where $\phi$ is a constant, $d_i$ is the $i^{th}$ fingerprint in the database, and $\Gamma$ is the neighbor distance threshold. Through iterative testing, we determined the optimal value of $\phi$ to be 0.08 and $\Gamma$ to be 20 meters. The minimum neighbor count is always one, as a point is always its own neighbor; this ensures a non-zero value in all cases. This factor increases the importance of points with low neighbor counts, helping improve accuracy in areas that are sparsely mapped. 
 
 \subsection{Composite Distance Metric $\sigma_C$}
-\indent Our WKNN measures distance as a linear combination of the Euclidean distance with penalty, $\sigma_{E'}$,  the inverse Jaccard distance $\sigma_{J^{-1}}$, and the neighbor count weighting, $W$,  given as follows:
+\indent Our WKNN ultimately measures distance as a linear combination of the Euclidean distance with penalty, $\sigma_{E'}$,  the inverse Jaccard distance $\sigma_{J^{-1}}$, and the neighbor count weighting, $W$,  given as follows:
 \begin{equation}
 \label{eq:composite}
 \sigma_C(A, B)=\beta_1\times\sigma_{E'}(A, B)+\beta_2\times\sigma_{J^{-1}}(A, B)+W_B
@@ -224,7 +217,7 @@ where $\beta_1$ and $\beta_2$ are constants, chosen as in \ref{eq:combined}. Thi
 
 \section{Performance Evaluation}
 
-Through empirical evaluation, we determined that our positioning application has an average error of 2.66m, meeting the requirements of most commercial applications. We break our results and analysis into three sections. First, we discuss our testing methodology. Second, we compare the four discussed distance metrics: Euclidean distance ($\sigma$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). Finally, we analyze our map-aware algorithm refinements: Floor Detection Preprocessing and Density-Penalizing Neighbor Weighting.
+Through empirical evaluation, we determined that our positioning application has an average error of 2.66 m, meeting the requirements of most commercial applications. We break our results and analysis into three sections. First, we discuss our testing methodology. Second, we compare the four discussed distance metrics: Euclidean distance ($\sigma$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). Finally, we analyze our map-aware algorithm refinements: Floor Detection Preprocessing and Density-Penalizing Neighbor Weighting.
 
 \subsection{Testing Methodology}
 We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm \cite{Machaj}, which efficiently creates a Poisson Distribution of points within the mapped regions, as displayed in Figure \ref{fig:test_points}. All FPs in the testing set were recorded using the HTC One m7. 
@@ -246,7 +239,7 @@ The accuracy of our positioning algorithm is dependent on the number of scans th
 \end{figure}
 
 \subsection{Distance Metric Comparisons}
-Figure \ref{fig:cdf_positioning_accuracy} shows the observed accuracy of our WKNN algorithm using the four distance metrics discussed in Section \ref{subsec:distance_metrics}. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-weighted Euclidean distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the average error to 2.78m. However, this linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric alone. The composite distance metric is discussed in the next section.
+Figure \ref{fig:cdf_positioning_accuracy} shows the observed accuracy of our WKNN algorithm using the four distance metrics discussed in Section \ref{subsec:distance_metrics}. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56 m and 4.75 m, respectively. Using the penalty-weighted Euclidean distance reduces the error to 2.87 m. A linear combination of the two metrics only improves the performance slightly, bringing the average error to 2.78 m. However, this linear combination reduces the maximum error to 9.70 m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric alone. The composite distance metric is discussed in the next section.
 
 \begin{table}[t!]
 \renewcommand{\arraystretch}{1.3}
@@ -282,8 +275,8 @@ Composite Distance Metric& 2.66   & 1.44\\
 
 \subsection{Map-Aware Algorithm Refinement}
 
-We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$) in Equation \ref{eq:composite}. The observed accuracy of this metric can be seen in Figure \ref{fig:cdf_positioning_accuracy}. Overall, neighbor weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, neighbor weighting increases the average error slightly, by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error well worth the dramatic reduction in maximum error. \\	
-\indent Figure \ref{fig:floor_preprocessing_effect} shows the estimated effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified.
+We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$) in Equation \ref{eq:composite}. The observed accuracy of this metric can be seen in Figure \ref{fig:cdf_positioning_accuracy}. Overall, neighbor weighting decreases the average error from 2.78 m to 2.66 m. For points with less than 5 m error, neighbor weighting increases the average error slightly, by 0.15 m. However, the technique reduces the maximum error by 40.5\%, from 9.70 m to 5.77 m, and the average error of points with more than a 5 m error by 50.1\%, from 7.12 m to 3.55 m. We consider this slight increase in average error well worth the dramatic reduction in maximum error. The standard deviation of the error shown in Table \ref{tab:table_distance_metric_accuracy} also clearly reflects this improvement.\\	
+\indent Figure \ref{fig:floor_preprocessing_effect} shows the estimated effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified. This performance improvement would be extremely significant in a large-scale commercial application.
 
 
 \begin{figure}[t!]
@@ -293,16 +286,14 @@ We add our Density-Penalizing Neighbor Weighting technique as a parameter to our
    \label{fig:floor_preprocessing_effect}
 \end{figure}
 
-This performance improvement would be extremely significant in a large-scale commercial application.
-
 \section{Discussion}
-\indent Our positioning application has runtime and accuracy comparable to other fingerprint-based systems \cite{Liu}. Although there are fingerprinting positioning systems with higher accuracy, these often utilize application-specific hardware, whereas our application operates with consumer hardware and assumes no prior site information.\\
-\indent Microsoft RADAR \cite{Bahl} is an example of a system using KNN that achieved an average error of 3-5 meters using RF signals. This system was implemented using one mapping device on a single floor that had three pre-arranged base stations. Our system achieves similar accuracy with consumer hardware in a commercial-like setting. Subsequent iterations of RADAR incorporated continual user-tracking and multiple RSS maps for different environments, such as time of day \cite{Bahl2}. The same improvements could be applied to our system.\\
-\indent Another system, proposed in 2013, uses improved double-peak Gaussian distributions and a probabilistic approach to determine position \cite{Chen}. This approach used a single device for mapping, and reported an average error of 1.5m. While this is a notably higher accuracy, the statistical analysis techniques used could be incorporated into our positioning application to improve accuracy.\\ 
-\indent Beyond increasing scan numbers, several other methods and additional data could be incorporated to further improve our system accuracy, including multiple directions in site-survey, WD inertia, and prior knowledge of the site. These options are left as future work.
+\indent Our positioning application has runtime and accuracy comparable to existing fingerprint-based systems \cite{Liu}. Although there are fingerprinting positioning systems with higher accuracy, these often utilize application-specific hardware, whereas our application operates with consumer hardware and assumes no prior site information.\\
+\indent Microsoft RADAR is an example of a system using KNN that achieved an average error of 3 m to 5 m using RF signals \cite{Bahl}. This system was implemented using one mapping device on a single floor that had three pre-arranged base stations. Our system achieves better accuracy with consumer hardware in a commercial-like setting. Subsequent iterations of RADAR incorporated continual user-tracking and multiple RSS maps for different environments, such as time of day \cite{Bahl2}. The same improvements could be applied to our system.\\
+\indent Another very recent system uses improved double-peak Gaussian distributions and a probabilistic approach to determine position \cite{Chen}. This approach used a single device for mapping, and reported an average error of 1.5 m. While this is a notably higher accuracy, the statistical analysis techniques used could be incorporated into our positioning application to improve accuracy.\\ 
+\indent Beyond increasing scan numbers, several other methods and additional data could be incorporated to further improve our system accuracy, including usage of mapped RSS standard deviation, multiple directions in site-survey, WD inertia, and prior knowledge of the site. These options are left as future work.
 
 \section{Conclusion}
-Our positioning system addresses many of the obstacles to widespread indoor positioning system implementation. We propose two novel metrics for use with the WKNN algorithm: Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm refinement for improved scalability: Floor Detection Preprocessing. Further improvement can be obtained by integrating other algorithm refinement techniques, such as Double Gaussian Distribution processing and the inclusion of user-feedback in the mapping process. The positioning system we implemented is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average accuracy of 2.66m, satisfying the requirements of most applications.
+We have implemented a position system that addresses many of the obstacles to widespread indoor positioning. We propose two novel metrics for use with the WKNN algorithm: Density-Penalizing Neighbor Weighting and Penalty-Weighted Euclidean Distance, as well an algorithm refinement for improved scalability: Floor Detection Preprocessing. Further improvement can be obtained by integrating other algorithm refinement techniques, such as Double Gaussian Distribution processing and the inclusion of user-feedback in the mapping process. Our positioning system is device-agnostic, able to serve multiple users, places no requirements on the site, and has an average accuracy of 2.66 m, satisfying the requirements of most applications.
 
 \section*{Acknowledgment}
 We would like to thank Professor Chris Gregg of Tufts University for his advice and encouragement.
@@ -317,55 +308,55 @@ We would like to thank Professor Chris Gregg of Tufts University for his advice 
 
 \bibitem{Lakmali} Lakmali, B.D.S. and D. Dias,
 'Database Correlation for GSM Location in Outdoor and Indoor Environments',
-\emph{Information and Automation for Sustainability, 2008. ICIAFS 2008. 4th International Conference on, vol., no., pp.42,47,}, 12-14 Dec. 2008.
+\emph{4th Int'l Conf. on Information and Automation for Sustainability (ICIAFS).} Dec. 2008.
 
 \bibitem{Liu} H, Liu, H. Darabi, P. Banerjee, and J. Li,
 'Survey of Wireless Indoor Positioning Techniques and Systems',
-\emph{ (Systems, Man, and Cybernetics, Part C: Applications and Reviews, IEEE Transactions on.}, vol.37, no.6, pp.1067,1080, Nov. 2007 
+\emph{ (Systems, Man, and Cybernetics, Part C: Applications and Reviews, IEEE Transactions on.} Nov. 2007.
 
 \bibitem{Kokkinis} A. Kokkinis, M. Raspopoulos, L. Kanaris, A. Liotta and S. Stavrou,
 'Map-aided fingerprint-based indoor positioning',
-\emph{Personal Indoor and Mobile Radio Communications (PIMRC), 2013 IEEE 24th International Symposium on}, vol., no., pp.270,274, 8-11 Sept. 2013.
+\emph{Personal Indoor and Mobile Radio Communications (PIMRC), 2013 IEEE 24th International Symposium on.} Sept. 2013.
+
+\bibitem{Chaudhuri} K. Chaudhuri, D. Sanghi, and P. Bhagwat,
+'Location Determination of a Mobile Device Using IEEE 802.11b Access Point Signals',
+\emph{IEEE Xplore. IEEE}. Mar. 2003.
 
 \bibitem{Bahl} P. Bahl and V. N. Padmanabhan,
 'RADAR: An in-building RF-based user location and tracking system',
-\emph{in Proc. IEEE INFOCOM}, 2000, Mar., vol. 2, pp. 775-784.
+\emph{in Proc. IEEE INFOCOM.} Mar. 2000.
 
 \bibitem{Fielding} R. Fielding,
 'Architectural Styles and the Design of Network-based Software Architectures',
-\emph{ (Unpublished Doctoral dissertation). University of California, Irvine.}, 200
+\emph{ (Unpublished Doctoral dissertation). University of California, Irvine.} 2000.
 
 \bibitem{Sayed}  A. Sayed, A. Tarighat, and N. Khajehnouri,
 'Challenges Faced in Developing Techniques for Accurate Wireless Location Information',
-\emph{IEEE Signal Processing Magazine. IEEE, 1}, July 2005. Web. 11 Mar. 2015.
+\emph{IEEE Signal Processing Magazine. IEEE, 1}. July 2005.
  
 \bibitem{Sayad2} A. Sayed, A. Tarighat, and N. Khajehnouri,
 'Performance Comparison of Indoor Positioning Techniques Based on Location Fingerprinting in Wireless Networks',
-\emph{IEEE Xplore}, 1 Jan. 2005. Web. 11 Mar. 2015. 
- 
-\bibitem{Chaudhuri} K. Chaudhuri, D. Sanghi, and P. Bhagwat,
-'Location Determination of a Mobile Device Using IEEE 802.11b Access Point Signals',
-\emph{IEEE Xplore. IEEE}, 16 Mar. 2003. Web. 11 Mar. 2015.
+\emph{IEEE Xplore}. Jan. 2005.
  
 \bibitem{Kemppi} P. Kemppi and S. Nousiainen,
 'Database Correlation Method for Multi-System Positioning',
-\emph{Vehicular Technology Conference, 2006. VTC 2006-Spring. IEEE 63rd },  vol.2, no., pp.866,870, 7-10 May 2006.
+\emph{Vehicular Technology Conference (VTC) IEEE 63rd}. May 2006.
 
 \bibitem{Dunbar} D. Dunbar and G. Humphreys,
 'A Spatial Data Structure for Fast Poisson-Disk Sample Generation',
-\emph{www.cs.virginia.edu. University of Virginia},  1 Jan. 2006. Web. 11 Mar. 2015. 
+\emph{www.cs.virginia.edu. University of Virginia}. Jan. 2006.
 
 \bibitem{Machaj} J. Machaj,, P. Brida, and R. Piche,
 'Rank Based Fingerprinting Algorithm for Indoor Positioning',
-\emph{ International Conference on Indoor Positioning and Indoor Navigation IPIN, Guimaraes, Portugal},  21-23 September 2011. Web. 12 Mar. 2015.
+\emph{Int'l Conf. on Indoor Positioning and Indoor Navigation (IPIN), Guimaraes, Portugal}. September 2011.
 
 \bibitem{Bahl2} P. Bahl and V. N. Padmanabhan,
 'Enhancements to the RADAR user location and tracking system',
-\emph{Microsoft Corp., Tech. Rep. MSR-TR- 2000,12}, Feb. 2000.
+\emph{Microsoft Corporation}. Feb. 2000.
 
 \bibitem{Chen} L. Chen, B. Li, K. Zhao, C. Rizos, and Z. Zheng,
 'An Improved Algorithm to Generate a Wi-Fi Fingerprint Database for Indoor Positioning',
-\emph{Sensors (Basel, Switzerland). Molecular Diversity Preservation International (MDPI)}, 8 Aug. 2013. Web. 03 Apr. 2015.
+\emph{Sensors (Basel, Switzerland). Molecular Diversity Preservation International (MDPI)}. Aug. 2013.
 
 
 \end{thebibliography}
