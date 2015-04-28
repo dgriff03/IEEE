@@ -45,12 +45,8 @@ The basic requirements for this indoor positioning system are to provide room-le
 \indent We design and implement an indoor positioning system which demonstrates the viability of an indoor positioning application in an environment facing constraints similar to the commercial setting described above. Our approach uses Received Signal Strength (RSS) measurements from a Wi-Fi network to position a Wireless Device (WD). RSS measurements can be effectively used for wireless indoor positioning by utilizing a Fingerprint (FP) map and a classifying algorithm. Each FP has a unique position on a floor plan, as well as a set of paired MAC addresses and RSS values.\\
 \indent Our application is based on the client-server model, which uses a single central server to serve a large number of clients \cite{Fielding}. The server manages the map database and uses HTTP to respond with our position estimation upon receiving a request containing an FP set. This approach is hardware-agnostic, easily scales to multiple users, and also allows simultaneous FP recording on multiple WDs, significantly speeding up the site-survey process.\\ 
 \indent We provide quantitative analyses of how different decisions, such as the number of scans and floor-detection preprocessing, affected the runtime and accuracy of our positioning application. Our application could be modified for higher accuracy at the cost of increasing mapping time and vice versa.
-\section{Floor Mapping}
-We now describe the building environment and discuss the methods used to generate the FP database.
-\subsection{Building Environment}
-We mapped two floors of Halligan Hall, the Computer Science and Electrical Engineering building at Tufts University. The average accessible area of each floor is 600m$^2$. The floor plans were available, but the locations of wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the average RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have an average RSS of -120 dB. 
- 
-\begin{figure}[h!]
+
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{APContour}
     \caption{Visible unique MAC addresses in accessible areas on the first floor of Halligan}
@@ -58,18 +54,24 @@ We mapped two floors of Halligan Hall, the Computer Science and Electrical Engin
 \end{figure}
 
 
-\begin{figure}[h!]
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{dbContour}
    \caption{Average RSS contour map in accessible areas on the second floor of Halligan}
    \label{fig:rss_contour_map}
 \end{figure}
 
+\section{Floor Mapping}
+We now describe the building environment and discuss the methods used to generate the FP database.
+\subsection{Building Environment}
+We mapped two floors of Halligan Hall, the Computer Science and Electrical Engineering building at Tufts University. The average accessible area of each floor is 600m$^2$. The floor plans were available, but the locations of wireless access points were not disclosed. Furthermore, there are several areas in the building that we did not have access to, such as restrooms and offices. As such, this building was a model of the commercial constraints described above. Since the location of the access points was unknown, contour maps were generated in order to examine the number of unique MAC addresses visible at each accessible location, as well as the average RSS values. Unsurveyed areas were assumed to have 0 visible MAC addresses and have an average RSS of -120 dB. 
+ 
+
 We performed the mapping of both visible MAC addresses and average RSS values on all floors. Figure \ref{fig:visible_unique_macs} shows the MAC addresses visible on the first floor of Halligan, while Figure \ref{fig:rss_contour_map} shows the average RSS values on the second floor of Halligan.
 
 \subsection{Fingerprint Logging Methodology}
 
-\begin{figure}[h!] 
+\begin{figure}[t!] 
   \centering
     \includegraphics[width=0.5\textwidth]{floorImage.png}
      \caption{Mapped positions in Halligan on both floors}
@@ -106,6 +108,13 @@ Scan Time per Floor (Hours)               & 0.24   & 1.2     & \textbf{3.5}     
 
 \indent Increasing the number of scans improves MAC coverage, but involves a time tradeoff, as scanning is the most time-consuming part of site survey. Different WDs had dramatically different scan times, ranging from 0.20 to 2.0 seconds per scan. Table \ref{tab:table_floor_times} lists the approximate time to record a floor for each number of scans, assuming the worst-case scan time. The number of locations on each floor was based on the average number of locations facing only one direction.
 
+
+
+\indent We chose a number of scans for site surveying which balanced MAC coverage against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table \ref{tab:MAC_accuracy}, for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
+\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and Samsung Galaxy Nexus (Wi-Fi: IEEE 802.11 a/b/g/n). Because of different phones' hardware and processing capabilities, the average difference between each phone's recording of the same physical location was 6.3 dB, using $\sigma_E$ (Equation \ref{eq:euclidean}). This value is notably high compared to an average difference of 1.7 dB between four surveys made using the same phone. Despite this inconsistency between devices, our application was able to provide acceptable levels of accuracy. This decision to use multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
+\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements \cite{Sayad}. We found an average difference of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with multiple directions for applications requiring higher accuracy.\\
+\indent The set of FPs collected during mapping is used as the database for our positioning algorithm. Upon receiving a positioning request containing FP $A$, the algorithm compares $A$ with each FP entry in the database, using the FP entries most similar to $A$ to estimate $A$'s position on the map.
+
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.3}
 \caption{MAC Coverage by Scan Numbers}
@@ -129,11 +138,6 @@ Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100
 \end{tabular}
 }
 \end{table}
-
-\indent We chose a number of scans for site surveying which balanced MAC coverage against worst-case device runtime. Given the similarity of MAC coverage, as shown in Table \ref{tab:MAC_accuracy}, for 30 scans and 100 scans and the runtimes of each, we opted for 30 scans.\\
-\indent When recording the FP database, four devices were utilized: the HTC One m7 (Wi-Fi: IEEE 802.11 a/ac/b/g/n), LG Nexus 5  (Wi-Fi: IEEE 802.11 a/ac/b/g/n), Samsung Galaxy S3 (Wi-Fi: Wi-Fi 802.11 a/b/g/n), and Samsung Galaxy Nexus (Wi-Fi: IEEE 802.11 a/b/g/n). Because of different phones' hardware and processing capabilities, the average difference between each phone's recording of the same physical location was 6.3 dB, using $\sigma_E$ (Equation \ref{eq:euclidean}). This value is notably high compared to an average difference of 1.7 dB between four surveys made using the same phone. Despite this inconsistency between devices, our application was able to provide acceptable levels of accuracy. This decision to use multiple devices reflects our desire to build a device-agnostic system. Further, supporting all device types significantly sped up the mapping process, as parallel mapping was possible.\\
-\indent A final consideration was the direction of the recording device. Direction has been shown to have an effect on measurements \cite{Sayad}. We found an average difference of 4.0 dB between four surveys made with the same WD in the same position, recorded at 90 degree angles from each other. We decided to map facing a single direction, as this reduced mapping time by a factor of four. Our implementation does, however, support mapping with multiple directions for applications requiring higher accuracy.\\
-\indent The set of FPs collected during mapping is used as the database for our positioning algorithm. Upon receiving a positioning request containing FP $A$, the algorithm compares $A$ with each FP entry in the database, using the FP entries most similar to $A$ to estimate $A$'s position on the map.
 
 \section{Positioning Algorithms}
 A number of classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map \cite{Sayad2}\cite{Chaudhuri}. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improved our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
@@ -225,7 +229,7 @@ Through empirical evaluation, we determined that our positioning application has
 \subsection{Testing Methodology}
 We recorded a set of points for the purpose of fine-tuning our coefficients, called the coefficient training set, as well as a second set of points for performance testing, called the testing set. Both sets contain points randomly generated by the Mitchell's Best Candidate II algorithm \cite{Machaj}, which efficiently creates a Poisson Distribution of points within the mapped regions, as displayed in Figure \ref{fig:test_points}. All FPs in the testing set were recorded using the HTC One m7. 
 
-\begin{figure}[H]
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{testpoints}
    \caption{Test points on Halligan Floor 1 (left) and Floor 2 (right); red boxes indicate accessible regions, and green dots indicate test points}
@@ -234,7 +238,7 @@ We recorded a set of points for the purpose of fine-tuning our coefficients, cal
 
 The accuracy of our positioning algorithm is dependent on the number of scans the WD makes for each test point, as shown in Figure \ref{fig:composite_accuracy}. Increasing the number of scans beyond five does not significantly improve the performance of our algorithm; therefore, we chose to test our positioning application against FPs gathered with five scans.
 
-\begin{figure}[H]
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{pull_errors.png}
    \caption{Accuracy of the composite distance metric for various numbers of positioning scans}
@@ -244,7 +248,7 @@ The accuracy of our positioning algorithm is dependent on the number of scans th
 \subsection{Distance Metric Comparisons}
 Figure \ref{fig:cdf_positioning_accuracy} shows the observed accuracy of our WKNN algorithm using the four distance metrics discussed in Section \ref{subsec:distance_metrics}. As the graph shows, the standard Euclidean distance metric performs significantly better than the inverse Jaccard coefficient, yielding average errors of 3.56m and 4.75m, respectively. Using the penalty-weighted Euclidean distance reduces the error to 2.87m. A linear combination of the two metrics only improves the performance slightly, bringing the average error to 2.78m. However, this linear combination reduces the maximum error to 9.70m, which is 21.1\% smaller than that of the penalty-weighted Euclidean distance metric alone. The composite distance metric is discussed in the next section.
 
-\begin{table}[H]
+\begin{table}[t!]
 \renewcommand{\arraystretch}{1.3}
 \caption{Distance Metric Accuracy}
 \label{tab:table_distance_metric_accuracy}
@@ -268,7 +272,7 @@ Composite Distance Metric& 2.66   & 1.44\\
 }
 \end{table}
 
-\begin{figure}[h!]
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{distance_comparison.png}
     \caption{Cumulative distribution of positioning accuracy for various WKNN distance metrics (K=3)}
@@ -282,7 +286,7 @@ We add our Density-Penalizing Neighbor Weighting technique as a parameter to our
 \indent Figure \ref{fig:floor_preprocessing_effect} shows the estimated effect of our floor detection preprocessing technique on runtime. For this calculation, we assume 100 fingerprints per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates that this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified.
 
 
-\begin{figure}[h!]
+\begin{figure}[t!]
   \centering
     \includegraphics[width=0.5\textwidth]{time_comparison.png}
    \caption{Estimated effect of floor detection preprocessing technique on positioning time}
