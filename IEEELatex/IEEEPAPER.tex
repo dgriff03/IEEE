@@ -9,25 +9,31 @@
 
 \title{Device-Agnostic Wi-Fi Fingerprint Positioning for Consumer Applications}
 
-\author{\IEEEauthorblockN{Daniel Griffin}
-\IEEEauthorblockA{Tufts University}
-\and
-\IEEEauthorblockN{Hunter Wapman}
-\IEEEauthorblockA{Tufts University}
-\and
-\IEEEauthorblockN{Brett Fischler}
-\IEEEauthorblockA{Tufts University}
-\and
-\IEEEauthorblockN{Tyler Lubeck}
-\IEEEauthorblockA{Tufts University}
-\and
-\IEEEauthorblockN{Mai Vu, PhD}
-\IEEEauthorblockA{Tufts University}}
+\author{
+	\IEEEauthorblockN{
+		Brett Fischler\IEEEauthorrefmark{1}\IEEEauthorrefmark{3}, 
+		Daniel Griffin\IEEEauthorrefmark{1}\IEEEauthorrefmark{4}, 
+		Tyler Lubeck\IEEEauthorrefmark{1}\IEEEauthorrefmark{6}, 
+		Kenneth Hunter Wapman\IEEEauthorrefmark{1}\IEEEauthorrefmark{4}, 
+		Mai Vu PhD\IEEEauthorrefmark{2}\IEEEauthorrefmark{5}
+	}
+	
+	\IEEEauthorblockA{
+		Department of Computer Science\IEEEauthorrefmark{1} \& Department of Electrical and Computer Engineering\IEEEauthorrefmark{2}, Tufts University, MA, USA
+	}
+	
+	\IEEEauthorblockA{
+		Brett.Fischler@gmail.com\IEEEauthorrefmark{3}, 
+		\{Daniel.Griffin, Hunter.Wapman\}@tufts.edu\IEEEauthorrefmark{4},
+		Tyler@TylerLubeck.com\IEEEauthorrefmark{6},
+		MaiVu@ece.tufts.edu\IEEEauthorrefmark{5}
+	}
+}
 
 \maketitle
 
 \begin{abstract}
-There is a growing need to position wireless devices in the real world for applications such as navigation, emergency location services, and contextual advertisements. Though GPS and the cellular network provide viable outdoor accuracy, these approaches are unsuited for indoor positioning because of non-Line of Sight environment. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system can be implemented in any Wi-Fi-enabled environment without modifying the site. We propose several optimized distance metrics as well as two novel environment-based methods, a density penalty factor and a floor preprocessing technique, to improve the accuracy of the Weighted K-Nearest Neighbor algorithm. Our implementation requires only thirteen minutes of site-survey time per 100m$^2$ and has an average positioning accuracy of 2.66m, which is sufficient for most practical applications.
+There is a growing need to position wireless devices in the real world for applications such as navigation, emergency location services, and contextual advertisements. Though GPS and the cellular network provide viable outdoor accuracy, these approaches are unsuited for indoor positioning. We propose a high-accuracy Wi-Fi Fingerprint-based indoor positioning system ideal for consumer applications. This system can be implemented in any Wi-Fi-enabled environment without modifying the site. We propose several optimized distance metrics as well as two novel environment-based methods, a density penalty factor and a floor preprocessing technique, to improve the accuracy of the Weighted K-Nearest Neighbor algorithm. Our implementation requires only thirteen minutes of site-survey time per 100m$^2$ and has an average positioning accuracy of 2.66m, which is sufficient for most practical applications.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
