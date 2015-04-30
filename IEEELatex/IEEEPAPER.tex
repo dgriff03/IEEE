@@ -11,11 +11,11 @@
 
 \author{
 	\IEEEauthorblockN{
-		Brett Fischler\IEEEauthorrefmark{1}\IEEEauthorrefmark{3}, 
-		Daniel Griffin\IEEEauthorrefmark{1}\IEEEauthorrefmark{4}, 
-		Tyler Lubeck\IEEEauthorrefmark{1}\IEEEauthorrefmark{6}, 
-		Kenneth Hunter Wapman\IEEEauthorrefmark{1}\IEEEauthorrefmark{4}, 
-		Mai Vu PhD\IEEEauthorrefmark{2}\IEEEauthorrefmark{5}
+		Brett Fischler\IEEEauthorrefmark{1}, 
+		Daniel Griffin\IEEEauthorrefmark{1}, 
+		Tyler Lubeck\IEEEauthorrefmark{1}, 
+		Kenneth Hunter Wapman\IEEEauthorrefmark{1}, 
+		Mai Vu\IEEEauthorrefmark{2}
 	}
 	
 	\IEEEauthorblockA{
@@ -23,10 +23,10 @@
 	}
 	
 	\IEEEauthorblockA{
-		Brett.Fischler@gmail.com\IEEEauthorrefmark{3}, 
-		\{Daniel.Griffin, Hunter.Wapman\}@tufts.edu\IEEEauthorrefmark{4},
-		Tyler@TylerLubeck.com\IEEEauthorrefmark{6},
-		MaiVu@ece.tufts.edu\IEEEauthorrefmark{5}
+		Brett.Fischler@gmail.com, 
+		\{Daniel.Griffin, Hunter.Wapman\}@tufts.edu,
+		Tyler@TylerLubeck.com,
+		MaiVu@ece.tufts.edu
 	}
 }
 
@@ -138,12 +138,12 @@ Average                & 77.0    & 86.3     & \textbf{94.4}     & 98.9     & 100
 \section{Positioning Algorithms}
 A number of classifiers are suitable for determining the location of an unknown point given an RSS Fingerprint map \cite{Sayad2}\cite{Chaudhuri}. In our implementation, we use the deterministic Weighted K-Nearest Neighbor (WKNN) method to perform position estimation, as it experimentally improves our algorithm's performance over the standard KNN method. In this section, we discuss the WKNN method and propose several distance metrics to improve its performance. 
 \subsection{Weighted K-Nearest Neighbor Algorithm}
-\indent Consider a database $S$ of mapped FPs, in which $N=[n_1, n_2, ..., n_K]$ is the set of $K$ mapped FPs nearest to some recorded point $\rho$ measured by a distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\hat{\rho}$ of $\rho$ is calculated as:
+\indent Consider a database $S$ of mapped FPs, in which $N=[n_1, n_2, ..., n_K]$ is the set of $K$ mapped FPs nearest to some recorded point $\rho$ measured by a distance metric $\sigma$, which quantifies distance as a function of RSS. The estimated location $\hat{\rho}'$ of $\rho$ is calculated as:
 \begin{equation}
 \label{eq:wknn}
-\hat{\rho} = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}\hat{n_i}, \quad w_i = \sigma(n_i, \rho)^{-1}
+\hat{\rho}' = \sum\limits_{i=1}^{K}\frac{\omega_i}{\omega_{total}}n_i', \quad w_i = \sigma(n_i, \rho)^{-1}
 \end{equation}
-where $\omega_i$ is the weight assigned to $n_i$, $\hat{n_i}$ is the position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method is a special case of WKNN which uses equal weights for FPs in $N$. We discuss the specific distance metrics we implement in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 \cite{Kokkinis}. 
+where $\omega_i$ is the weight assigned to $n_i$, $n_i'$ is the recorded position corresponding to $n_i$, $\omega_{total}$ is the sum of the weights of all FPs in N, and $\sigma(n_i, \rho)$ is the signal distance between $n_i$ and $\rho$ using distance metric $\sigma$. The K-Nearest Neighbor (KNN) method is a special case of WKNN which uses equal weights for FPs in $N$. We discuss the specific distance metrics we implement in the next section. We use a K value of 3 because it has been shown to have a higher accuracy than the Nearest Neighbor (NN) method, where K is 1 \cite{Kokkinis}. 
 
 \subsection{Distance Metrics}\label{subsec:distance_metrics}
 WKNN is a very flexible classifier which can incorporate a variety of distance metrics. In this section, we discuss the four distance metrics we use to quantify the difference between two RSS measurements: Euclidean distance ($\sigma_E$), penalty-weighted Euclidean distance ($\sigma_{E'}$), inverse Jaccard coefficient ($\sigma_{J^{-1}}$), and a linear combination of $\sigma_{E'}$ and $\sigma_{J^{-1}}$ ($\sigma_{E' + J^{-1}}$). For consistency in our definitions, we here define two FPs $A$ and $B$ with RSS vectors $a=[a_1, a_2, ... , a_m]$ and $b=[b_1, b_2, ... , b_n]$, respectively. 
@@ -313,22 +313,21 @@ We would like to thank Professor Chris Gregg of Tufts University for his advice 
 
 \begin{thebibliography}{99}
 
-
 \bibitem{Lakmali} Lakmali, B.D.S. and D. Dias,
 'Database Correlation for GSM Location in Outdoor and Indoor Environments',
 \emph{4th Int'l Conf. on Information and Automation for Sustainability (ICIAFS).} Dec. 2008.
 
-\bibitem{Liu} H, Liu, H. Darabi, P. Banerjee, and J. Li,
+\bibitem{Liu} H, Liu, H. Darabi, P. Banerjee, and J. Liu,
 'Survey of Wireless Indoor Positioning Techniques and Systems',
-\emph{ (Systems, Man, and Cybernetics, Part C: Applications and Reviews, IEEE Transactions on.} Nov. 2007.
+\emph{ IEEE. Trans. Systems, Man, and Cybernetics, Part C: Applications and Reviews, Vol. 37, No. 6, pp. 1067 - 1080,} Nov. 2007.
 
 \bibitem{Kokkinis} A. Kokkinis, M. Raspopoulos, L. Kanaris, A. Liotta and S. Stavrou,
 'Map-aided fingerprint-based indoor positioning',
-\emph{Personal Indoor and Mobile Radio Communications (PIMRC), 2013 IEEE 24th International Symposium on.} Sept. 2013.
+\emph{IEEE 24th Int'l Symp. Personal Indoor and Mobile Radio Communications (PIMRC),} Sept. 2013.
 
-\bibitem{Chaudhuri} K. Chaudhuri, D. Sanghi, and P. Bhagwat,
+\bibitem{Chaudhuri} S. Saha, K. Chaudhuri, D. Sanghi, and P. Bhagwat,
 'Location Determination of a Mobile Device Using IEEE 802.11b Access Point Signals',
-\emph{IEEE Xplore. IEEE}. Mar. 2003.
+\emph{IIEEE Wireless Communications and Networking Conf. (WCNC),}. Mar. 2003.
 
 \bibitem{Bahl} P. Bahl and V. N. Padmanabhan,
 'RADAR: An in-building RF-based user location and tracking system',
@@ -336,35 +335,35 @@ We would like to thank Professor Chris Gregg of Tufts University for his advice 
 
 \bibitem{Fielding} R. Fielding,
 'Architectural Styles and the Design of Network-based Software Architectures',
-\emph{ (Unpublished Doctoral dissertation). University of California, Irvine.} 2000.
+\emph{ (Doctoral dissertation). University of California, Irvine.} 2000.
 
-\bibitem{Sayad}  A. Sayed, A. Tarighat, and N. Khajehnouri,
-'Challenges Faced in Developing Techniques for Accurate Wireless Location Information',
-\emph{IEEE Signal Processing Magazine. IEEE, 1}. July 2005.
+\bibitem{Sayad}  A. H. Sayed, A. Tarighat, and N. Khajehnouri,
+'Network-based Wireless Location: Challenges Faced in Developing Techniques for Accurate Wireless Location Information',
+\emph{IEEE Signal Processing Magazine. Vol. 22, No. 4, pp. 24 - 40,}. July 2005.
  
-\bibitem{Sayad2} A. Sayed, A. Tarighat, and N. Khajehnouri,
+\bibitem{Sayad2} Tsung-Nan Lin and Po-Chiang Lin,
 'Performance Comparison of Indoor Positioning Techniques Based on Location Fingerprinting in Wireless Networks',
-\emph{IEEE Xplore}. Jan. 2005.
+\emph{Int'l Conf. on Wireless Networks, Communications and Mobile Computing,} June 2005.
  
 \bibitem{Kemppi} P. Kemppi and S. Nousiainen,
 'Database Correlation Method for Multi-System Positioning',
-\emph{Vehicular Technology Conference (VTC) IEEE 63rd}. May 2006.
+\emph{IEEE 63rd Vehicular Technology Conference (VTC)}. May 2006.
 
 \bibitem{Dunbar} D. Dunbar and G. Humphreys,
 'A Spatial Data Structure for Fast Poisson-Disk Sample Generation',
-\emph{www.cs.virginia.edu. University of Virginia}. Jan. 2006.
+\emph{Proc. ACM SIGGRAPH,}. July 2006
 
-\bibitem{Machaj} J. Machaj,, P. Brida, and R. Piche,
+\bibitem{Machaj} J. Machaj, P. Brida, and R. Piche,
 'Rank Based Fingerprinting Algorithm for Indoor Positioning',
 \emph{Int'l Conf. on Indoor Positioning and Indoor Navigation (IPIN), Guimaraes, Portugal}. September 2011.
 
-\bibitem{Bahl2} P. Bahl and V. N. Padmanabhan,
+\bibitem{Bahl2} P. Bahl, V. N. Padmanabhan and A. Balachandran,
 'Enhancements to the RADAR user location and tracking system',
-\emph{Microsoft Corporation}. Feb. 2000.
+\emph{TechReport MSR-TR-2000-12, Microsoft Corporation}. Feb. 2000.
 
 \bibitem{Chen} L. Chen, B. Li, K. Zhao, C. Rizos, and Z. Zheng,
 'An Improved Algorithm to Generate a Wi-Fi Fingerprint Database for Indoor Positioning',
-\emph{Sensors (Basel, Switzerland). Molecular Diversity Preservation International (MDPI)}. Aug. 2013.
+\emph{Sensors Vol. 13, No. 8, pp. 11085-11096, DOI: 10.3390/s130811085,}. Aug. 2013.
 
 
 \end{thebibliography}
