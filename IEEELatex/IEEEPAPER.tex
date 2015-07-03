@@ -55,7 +55,7 @@ The basic requirements for this indoor positioning system are to provide room-le
 
 \begin{figure}[t!]
   \centering
-    \includegraphics[width=0.5\textwidth]{APContour}
+    \includegraphics[width=0.4\textwidth]{APContour}
     \caption{Visible unique MAC addresses in accessible areas on the first floor of Halligan Hall}
     \label{fig:visible_unique_macs}
 \end{figure}
@@ -63,7 +63,7 @@ The basic requirements for this indoor positioning system are to provide room-le
 
 \begin{figure}[t!]
   \centering
-    \includegraphics[width=0.5\textwidth]{dbContour}
+    \includegraphics[width=0.4\textwidth]{dbContour}
    \caption{Average RSS contour map in accessible areas on the second floor of Halligan Hall}
    \label{fig:rss_contour_map}
 \end{figure}
@@ -79,7 +79,8 @@ We performed the mapping of both visible MAC addresses and average RSS values on
 
 \begin{figure}[t!] 
   \centering
-    \includegraphics[width=0.5\textwidth]{floorImage.png}
+    \includegraphics[width=0.4\textwidth]{Floor1.png}
+    \includegraphics[width=0.4\textwidth]{Floor2.png}
      \caption{Mapped locations in Halligan Hall on both floors}
      \label{fig:mapped_positions}
 \end{figure}
@@ -233,8 +234,9 @@ We recorded a set of points for the purpose of fine-tuning our coefficients, the
 
 \begin{figure}[t!]
   \centering
-    \includegraphics[width=0.5\textwidth]{testpoints}
-   \caption{Test points on Halligan Floor 1 (left) and Floor 2 (right); red boxes indicate accessible regions, and green dots indicate test points}
+    \includegraphics[width=0.4\textwidth]{TestFloor1.png}
+    \includegraphics[width=0.4\textwidth]{TestFloor2.png}
+   \caption{Test points on Halligan Floor 1 (Top) and Floor 2 (Bottom); red boxes indicate accessible regions, and green dots indicate test points}
    \label{fig:test_points}
 \end{figure}
 
@@ -285,15 +287,7 @@ Composite Distance Metric& 2.66   & 1.44\\
 \subsection{Map-Aware Algorithm Refinement}
 
 We add our Density-Penalizing Neighbor Weighting technique as a parameter to our composite distance metric ($\sigma_C$) in Equation \ref{eq:composite}. The accuracy of this metric can be seen in Figure \ref{fig:cdf_positioning_accuracy}. Overall, neighbor weighting decreases the average error from 2.78m to 2.66m. For points with less than 5m error, neighbor weighting increases the average error slightly, by 0.15m. However, the technique reduces the maximum error by 40.5\%, from 9.70m to 5.77m, and the average error of points with more than a 5m error by 50.1\%, from 7.12m to 3.55m. We consider this slight increase in average error for points with error less than 5m well worth the dramatic reduction in maximum error. The standard deviation of the error shown in Table \ref{tab:table_distance_metric_accuracy} clearly reflects this improvement.\\	
-\indent Figure \ref{fig:floor_preprocessing_effect} shows the our estimates of the effect of the Floor Detection Preprocessing technique on runtime. For this calculation, we assume 100 locations per floor. This preprocessing does not improve runtime results in our testing environment, but our simulation indicates this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds, for a system with 100 floors. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified. This performance improvement would be extremely significant in a large-scale commercial application.
-
-
-\begin{figure}[t!]
-  \centering
-    \includegraphics[width=0.5\textwidth]{time_comparison.png}
-   \caption{Estimated effect of Floor Detection Preprocessing technique on positioning time}
-   \label{fig:floor_preprocessing_effect}
-\end{figure}
+\indent Our novel Floor Detection Preprocessing technique does not improve runtime results in our testing environment, but our simulation of a 100 floor database indicates this technique would reduce positioning time by 39.1\%, from 6.89 seconds to 4.20 seconds. This time reduction results from the reduced number of penalty-weighted Euclidean distance calculations required once a floor has been identified. This performance improvement would be extremely significant in a large-scale commercial application.
 
 \section{Discussion}
 \indent Our positioning application has runtime and accuracy comparable to existing FP-based systems \cite{Liu}. Although there are fingerprinting positioning systems with higher accuracy, these often utilize application-specific hardware, whereas our application operates with consumer hardware and assumes no prior site information.\\
